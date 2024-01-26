@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] int MaxHealth = 100;
 
-    [SerializeField] float moveSmooth = 0.02f;
+    [SerializeField] float moveSmooth = 0.25f;
 
 
     [Header("Display")]

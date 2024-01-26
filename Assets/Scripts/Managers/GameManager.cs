@@ -14,17 +14,23 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    [Header("Resources")]
+    public SkillActionSheetSO skillActionSheets;
 
 
+
+    [Header("Parameters")]
     public int bpm = 120;
 
     public int ms_JudgmentInterval_pos = 80; // 正向
     public int ms_JudgmentInterval_neg = 80; // 反向
 
-    [SerializeField]
-    public int currentBeat {  get; private set; }
 
+    [Header("Display")]
     public int lastSucessBeat = 0;
+
+
+    public int currentBeat { get; private set; }
 
     public TimelineManager.BeatEvent onHeavyBeat = () => { };
     public TimelineManager.BeatEvent onNormalBeat = () => { };

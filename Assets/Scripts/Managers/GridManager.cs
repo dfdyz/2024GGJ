@@ -63,7 +63,13 @@ public class GridManager : MonoBehaviour
     {
         return grids[GetRealPos(playerAt, 0)].GetLandingPos();
     }
-    
+
+    public Vector2 GetEnemyVisualPos()
+    {
+        return grids[GetRealPos(enemyAt, 0)].GetLandingPos();
+    }
+
+
     public void MovePlayer(int dir)
     {
         
