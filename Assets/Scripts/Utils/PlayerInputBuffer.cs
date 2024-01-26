@@ -26,6 +26,11 @@ public class PlyerInputBuffer
         return buffer[atSlot].count;
     }
 
+    public InputType GetBufferedType(int atSlot, int idx)
+    {
+        return buffer[atSlot].types[idx];
+    }
+
     public void Clear()
     {
         for(int i = 0; i < buffer.Length; ++i)

@@ -75,19 +75,21 @@ public class PlayerController : MonoBehaviour
 
 
 
-
+    int slot;
     bool HandleJudgmentFirst()
     {
         //print(judgmentBeat + " " + GameManager.Instance.currentBeat);
-        if ((judgmentBeat-1) % 4 == 0) //clear input cache
+        slot = (judgmentBeat - 1) % 4;
+        if (slot == 0) //clear input cache
         {
             inputCache.Clear();
         }
 
         bool flag = false;
+
         if (Input.GetKeyDown(KeyCode.A)) //Move L
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.MoveL);
+            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveL);
 
             GridManager.Instance.playerAt -= 1;
 
@@ -95,7 +97,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.MoveR);
+            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveR);
 
             GridManager.Instance.playerAt += 1;
 
@@ -103,12 +105,12 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.Accept);
+            inputCache.Put(slot, PlyerInputBuffer.InputType.Accept);
 
             flag = true;
         }
 
-        return true;
+        return flag;
     }
 
     
@@ -116,17 +118,29 @@ public class PlayerController : MonoBehaviour
 
     void HandleJudgmentSecond()
     {
+        slot = (judgmentBeat - 1) % 4;
         if (Input.GetKeyDown(KeyCode.A)) //Move L
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.MoveL);
+            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlyerInputBuffer.InputType.Accept)
+            {
+                GridManager.Instance.playerAt -= 1;
+            }
+
+
+            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveL);
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.MoveR);
+            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlyerInputBuffer.InputType.Accept)
+            {
+                GridManager.Instance.playerAt += 1;
+            }
+
+            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveR);
         }
         if (Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
-            inputCache.Put((judgmentBeat - 1) % 4, PlyerInputBuffer.InputType.Accept);
+            inputCache.Put(slot, PlyerInputBuffer.InputType.Accept);
         }
     }
 
