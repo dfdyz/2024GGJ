@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
 
     public int bpm = 120;
 
-    public int ms_JudgmentInterval = 80;
+    public int ms_JudgmentInterval_pos = 80; // 正向
+    public int ms_JudgmentInterval_neg = 80; // 反向
 
     [SerializeField]
     public int currentBeat {  get; private set; }
@@ -46,7 +47,8 @@ public class GameManager : MonoBehaviour
             currentBeat = 0;
             lastSucessBeat = 0;
 
-            timeline.judgmentInterval = ms_JudgmentInterval / 1000.0;
+            timeline.ms_JudgmentInterval_pos = ms_JudgmentInterval_pos / 1000.0;
+            timeline.ms_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
             timeline.Start(bpm);
         }
         else

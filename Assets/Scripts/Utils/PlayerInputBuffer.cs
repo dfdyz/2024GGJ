@@ -1,5 +1,6 @@
 
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerInputBuffer
 {
@@ -54,6 +55,15 @@ public class PlayerInputBuffer
                 buffer[3].count > 1 ? Type2Str(buffer[3].types[1]) : "-"
             );
         return str;
+    }
+
+
+
+
+
+    public void MatchSkill(in List<int> skillIds)
+    {
+        // todo
     }
 
 

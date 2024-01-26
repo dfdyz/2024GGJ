@@ -16,7 +16,8 @@ public class TimelineManager
 
     public BeatEvent onBaseBeat = () => {};
 
-    public double judgmentInterval = 0;
+    public double ms_JudgmentInterval_pos = 0;
+    public double ms_JudgmentInterval_neg = 0;
 
     public double judgmentOffset = 0;
     public TimelineManager() {
@@ -40,12 +41,12 @@ public class TimelineManager
 
     public bool JudgementNextBeat()
     {
-        return Time.realtimeSinceStartupAsDouble >= GetNextBaseBeatTick() - judgmentInterval + judgmentOffset;
+        return Time.realtimeSinceStartupAsDouble >= GetNextBaseBeatTick() - ms_JudgmentInterval_neg + judgmentOffset;
     }
 
     public bool JudementThisBeat()
     {
-        return Time.realtimeSinceStartupAsDouble <= lastBeatTick + judgmentInterval + judgmentOffset;
+        return Time.realtimeSinceStartupAsDouble <= lastBeatTick + ms_JudgmentInterval_pos + judgmentOffset;
     }
 
     public void Start(int bpm)

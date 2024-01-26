@@ -43,7 +43,7 @@ public class DebugManager : MonoBehaviour
 
         if (GUILayout.Button("AudioOffset"))
         {
-            Settings.Instance.StartAdjustAudioOffset();
+            SettingsManager.Instance.StartAdjustAudioOffset();
         }
 
         GUILayout.Label(string.Format("{0:F3}", GameManager.Instance.audioOffset));

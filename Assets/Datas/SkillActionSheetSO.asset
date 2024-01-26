@@ -12,16 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f33ed80192fb8946828730d6278a9fd, type: 3}
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
-  skillRegistries:
-  - name: TestSkill
-    phases:
-    - type: 0
-      phaseData: 
-      neededOrder: 0
-      input: 
-      audio: 
-    - type: 0
-      phaseData: 
-      neededOrder: 0
-      input: 
-      audio: 
+  playerkillRegistries: []
+  mobSkillRegistries: []

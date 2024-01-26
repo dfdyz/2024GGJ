@@ -9,11 +9,16 @@ public class SkillActionSheetSO : ScriptableObject
     
     public enum PhaseType
     {
-        AttachMovement, Normal, AttachMovementWithAttac, Attack
+        AttachMovement, Normal, AttachMovementWithAttack, Attack
     }
 
     [SerializeField]
-    public SkillClip[] skillRegistries;
+    public SkillClip[] playerkillRegistries;
+
+
+    [SerializeField]
+    public SkillClip[] mobSkillRegistries;
+
 
     [Serializable]
     public struct SkillClip
@@ -29,17 +34,17 @@ public class SkillActionSheetSO : ScriptableObject
 
         public int[] phaseData;   // 段数据
         /*
-         * 无效果
+         * 无效果 Normal
          *      不用填
          * 
-         * 额外位移
+         * 额外位移 AttachMovement
          *      0: 位移距离
          *      
-         * 额外位移攻击
+         * 额外位移攻击 AttachMovementWithAttack
          *      0: 位移距离
          *      1: 伤害（得分？）
          * 
-         * 攻击
+         * 攻击 Attack
          *      0: 攻击范围
          *      1: 伤害（得分？）
          * 

@@ -157,7 +157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bpm: 120
-  ms_JudgmentInterval: 60
+  ms_JudgmentInterval_pos: 120
+  ms_JudgmentInterval_neg: 80
   lastSucessBeat: 0
 --- !u!114 &137796652
 MonoBehaviour:
