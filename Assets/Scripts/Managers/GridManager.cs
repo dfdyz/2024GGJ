@@ -32,6 +32,7 @@ public class GridManager : MonoBehaviour
 
 
 
+
     GridCtrl InstantiateGrid()
     {
         GameObject prefab = Resources.Load<GameObject>(gridPrefabPath);
@@ -58,6 +59,11 @@ public class GridManager : MonoBehaviour
         return (((coord + offset) % grids.Length) + grids.Length) % grids.Length;
     }
 
+    public Vector2 GetPlayerVisualPos()
+    {
+        return grids[GetRealPos(playerAt, 0)].GetLandingPos();
+    }
+    
     public void MovePlayer(int dir)
     {
         

@@ -6,8 +6,7 @@ public class GridCtrl : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
     public int damage { get; private set; }
-
-    
+    public Vector2 LandingOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +32,10 @@ public class GridCtrl : MonoBehaviour
         this.gameObject.transform.position = vec2;
     }
 
+    public Vector2 GetLandingPos()
+    {
+        return (Vector2)this.gameObject.transform.position + LandingOffset;
+    }
 
 
 }

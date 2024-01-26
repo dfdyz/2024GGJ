@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class DebugManager : MonoBehaviour
 {
+    public static DebugManager Instance { get; private set; }
+    public delegate void DebugWindowAttachment();
+
+    public DebugWindowAttachment debugWindowAttachmentFunc = () => { };
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +47,11 @@ public class DebugManager : MonoBehaviour
         }
 
         GUILayout.Label(string.Format("{0:F3}", GameManager.Instance.audioOffset));
+
+
+        debugWindowAttachmentFunc();
+
+
 
         GUILayout.EndVertical();
 

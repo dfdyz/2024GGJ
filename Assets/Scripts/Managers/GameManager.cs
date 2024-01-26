@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     public int lastSucessBeat = 0;
 
+    public TimelineManager.BeatEvent onHeavyBeat = () => { };
+    public TimelineManager.BeatEvent onNormalBeat = () => { };
+    public TimelineManager.BeatEvent onBeat = () => { };
 
     public double audioOffset
     {
@@ -51,6 +56,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int GetModifiedCurrBeat()
+    {
+        return Math.Max(currentBeat, lastSucessBeat);
+    }
+
+
     public void BattleEnd()
     {
         if(isStarted)
@@ -71,26 +82,30 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         timeline.onBaseBeat = onBaseBeat;
-        audioOffset = 0.226;
+        audioOffset = 0.16;
     }
+
+
+
 
     void onBaseBeat()
     {
-        if(currentBeat % 4 == 0)
+        ++currentBeat;
+        onBeat();
+        if((currentBeat - 1) % 4 == 0)
         {
             AudioManager.Instance.PlayAudio("heavybeat");
+            onHeavyBeat();
         }
         else
         {
             AudioManager.Instance.PlayAudio("beat");
+            onNormalBeat();
         }
-        ++currentBeat;
-
     }
 
     public int Judgment()
     {
-
         if (timeline.JudementThisBeat())
         {
             return currentBeat;
