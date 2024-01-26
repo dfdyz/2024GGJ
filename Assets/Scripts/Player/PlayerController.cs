@@ -23,7 +23,12 @@ public class PlayerController : MonoBehaviour
             if (judgmentBeat > 0 && judgmentBeat != GameManager.Instance.lastSucessBeat)
             {
                 GameManager.Instance.lastSucessBeat = judgmentBeat;
-                print("B");
+                AudioManager.Instance.PlayAudio("heavybeat");
+                print("Beated");
+            }
+            else
+            {
+                print("Miss");
             }
         }
     }

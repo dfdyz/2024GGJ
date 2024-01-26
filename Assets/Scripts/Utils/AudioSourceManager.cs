@@ -25,6 +25,9 @@ public class AudioSourceManager
         for (int i = 0; i < audioSourceCount; i++)
         {
             audioSources[i] = audioSourceHolder.AddComponent<AudioSource>();
+            audioSources[i].spatialize = false;
+            audioSources[i].bypassEffects = true;
+            audioSources[i].bypassReverbZones = true;
         }
     }
 
