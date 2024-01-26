@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GridCtrl : MonoBehaviour
 {
+    [SerializeField] SpriteRenderer spriteRenderer;
+    public int damage { get; private set; }
 
+    
 
     // Start is called before the first frame update
     void Start()
@@ -17,4 +20,19 @@ public class GridCtrl : MonoBehaviour
     {
         
     }
+
+
+    public void SetDanger(int damage)
+    {
+        this.damage = damage;
+        spriteRenderer.color = damage <= 0 ? Color.white : Color.red;
+    }
+
+    public void SetPosition(Vector2 vec2)
+    {
+        this.gameObject.transform.position = vec2;
+    }
+
+
+
 }
