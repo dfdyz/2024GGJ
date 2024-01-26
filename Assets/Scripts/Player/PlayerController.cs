@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [Header("Display")]
     public int Health;
 
-    private PlyerInputBuffer inputCache = new PlyerInputBuffer(8);
+    private PlayerInputBuffer inputCache = new PlayerInputBuffer(8);
 
 
     // Start is called before the first frame update
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A)) //Move L
         {
-            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveL);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.MoveL);
 
             GridManager.Instance.playerAt -= 1;
 
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
         {
-            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveR);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.MoveR);
 
             GridManager.Instance.playerAt += 1;
 
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
-            inputCache.Put(slot, PlyerInputBuffer.InputType.Accept);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.Accept);
 
             flag = true;
         }
@@ -121,26 +121,26 @@ public class PlayerController : MonoBehaviour
         slot = (judgmentBeat - 1) % 4;
         if (Input.GetKeyDown(KeyCode.A)) //Move L
         {
-            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlyerInputBuffer.InputType.Accept)
+            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlayerInputBuffer.InputType.Accept)
             {
                 GridManager.Instance.playerAt -= 1;
             }
 
 
-            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveL);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.MoveL);
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
         {
-            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlyerInputBuffer.InputType.Accept)
+            if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlayerInputBuffer.InputType.Accept)
             {
                 GridManager.Instance.playerAt += 1;
             }
 
-            inputCache.Put(slot, PlyerInputBuffer.InputType.MoveR);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.MoveR);
         }
         if (Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
-            inputCache.Put(slot, PlyerInputBuffer.InputType.Accept);
+            inputCache.Put(slot, PlayerInputBuffer.InputType.Accept);
         }
     }
 

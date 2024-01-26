@@ -1,12 +1,12 @@
 
 using System.Collections;
 
-public class PlyerInputBuffer
+public class PlayerInputBuffer
 {
 
     InputClip[] buffer;
 
-    public PlyerInputBuffer(int size)
+    public PlayerInputBuffer(int size)
     {
         buffer = new InputClip[size];
 

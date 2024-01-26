@@ -7,39 +7,19 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
+
+    [SerializeField]
+    private AudioRegistriesSO registries;
     [SerializeField]
     private GameObject audioSourceHolder;
 
     private AudioSourceManager audioSourceManager;
 
-    [Serializable]
-    struct Registry
-    {
-        public string name;
-        public AudioClip audio;
-    }
-
-    [SerializeField]
-    private Registry[] registries_;
-
-    private Dictionary<string, AudioClip> registries;
-
     private void Awake()
     {
         Instance = this;
-        registries = new Dictionary<string, AudioClip>();
 
-        for(int i = 0; i < registries_.Length; i++)
-        {
-            try
-            {
-                registries.Add(registries_[i].name, registries_[i].audio);
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-            }
-        }
+        registries.Init();
 
         audioSourceManager = new AudioSourceManager(audioSourceHolder, 16);
         audioSourceManager.Init();

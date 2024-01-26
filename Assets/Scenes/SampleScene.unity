@@ -171,12 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593a65a878d8eae4d881d0544c250e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  registries: {fileID: 11400000, guid: 38a700ce35332d44e87cce40496c8c50, type: 2}
   audioSourceHolder: {fileID: 360360839}
-  registries_:
-  - name: beat
-    audio: {fileID: 8300000, guid: 51b1c4125c756314ebf1e442fd089bdc, type: 3}
-  - name: heavybeat
-    audio: {fileID: 8300000, guid: 61c3224c6eb1fcc45ae986e0d3ef089b, type: 3}
 --- !u!4 &137796653
 Transform:
   m_ObjectHideFlags: 0
