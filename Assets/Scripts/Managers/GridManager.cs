@@ -49,8 +49,6 @@ public class GridManager : MonoBehaviour
             grids[i] = InstantiateGrid();
             grids[i].gameObject.transform.position = gridStartPos + offsetPerGrid * i;
         }
-
-
     }
 
 

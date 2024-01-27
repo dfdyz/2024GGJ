@@ -72,6 +72,7 @@ public class EnemyCtrl : MonoBehaviour
     {
         if (currPhase == stunBeginPhase)
         {
+            print("Been Stuned");
             currPhase = -10;
         }
         if(currPhase >= 0)
@@ -141,8 +142,9 @@ public class EnemyCtrl : MonoBehaviour
 
     void delayJudgment()
     {
-        if (currPhase-1 == stunBeginPhase)
+        if (currPhase - 1 == stunBeginPhase)
         {
+            print("Been Stuned");
             currPhase = -10;
         }
 

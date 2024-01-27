@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     public int GetModifiedCurrBeat()
     {
         return Math.Max(currentBeat, lastSucessBeat);

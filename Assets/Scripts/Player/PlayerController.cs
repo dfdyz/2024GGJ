@@ -322,9 +322,6 @@ public class PlayerController : MonoBehaviour
         }
 
         if(phase.effect != "") print(phase.effect);
-
-
-
     }
 
 
