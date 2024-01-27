@@ -13,8 +13,61 @@ MonoBehaviour:
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
   playerkillRegistries:
-  - name: Test
+  - name: test11
     phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000002000000
+        count: 2
+      audio: 
+      effect: 
+  - name: test12
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000002000000
+        count: 2
+      audio: 
+      effect: 
+  - name: test21
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
     - type: 1
       phaseData: 
       inputClip:
@@ -29,12 +82,12 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
-  - name: Test
+  - name: test22
     phases:
     - type: 1
       phaseData: 
       inputClip:
-        types: 0100000000000000
+        types: 0100000001000000
         count: 1
       audio: 
       effect: 
@@ -42,7 +95,118 @@ MonoBehaviour:
       phaseData: 
       inputClip:
         types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
         count: 2
+      audio: 
+      effect: 
+  - name: test31
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 0
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0200000002000000
+        count: 1
+      audio: 
+      effect: 
+  - name: test32
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 0
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0200000002000000
+        count: 1
+      audio: 
+      effect: 
+  - name: test41
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 0
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0200000002000000
+        count: 1
       audio: 
       effect: 
   mobSkillRegistries: []
