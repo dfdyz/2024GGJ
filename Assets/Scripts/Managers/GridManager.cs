@@ -22,16 +22,16 @@ public class GridManager : MonoBehaviour
     [Header("Display")]
     public int playerAt = 0;
     public int enemyAt = 0;
+    public EnemyCtrl enemyCtrl;
+    //public PlayerController playerCtrl;
 
     private void Awake()
     {
         Instance = this;
         int gridCounts = radius * 2 + dangerAreaSize * 2 + 1;
         grids = new GridCtrl[gridCounts];
+
     }
-
-
-
 
     GridCtrl InstantiateGrid()
     {
@@ -40,8 +40,6 @@ public class GridManager : MonoBehaviour
         return gridins.GetComponent<GridCtrl>();
     }
 
-
-
     public void InitGrids()
     {
         for(int i = 0; i < grids.Length; i++)
@@ -49,8 +47,6 @@ public class GridManager : MonoBehaviour
             grids[i] = InstantiateGrid();
             grids[i].gameObject.transform.position = gridStartPos + offsetPerGrid * i;
         }
-
-
     }
 
 
@@ -69,17 +65,11 @@ public class GridManager : MonoBehaviour
         return grids[GetRealPos(enemyAt, 0)].GetLandingPos();
     }
 
-
-    public void MovePlayer(int dir)
+    public void InitBattlePos()
     {
-        
+        enemyAt = radius + dangerAreaSize + 1;
+        playerAt = enemyAt - 5;
     }
-
-    public void MoveEnemy(int dir)
-    {
-        
-    }
-
 
     public void SetupGrid()
     {

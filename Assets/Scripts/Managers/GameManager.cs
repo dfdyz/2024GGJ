@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Playables;
 using static SkillActionSheetSO;
 
 
@@ -19,8 +20,9 @@ public class GameManager : MonoBehaviour
     [Header("Resources")]
     public SkillActionSheetSO skillActionSheet;
     public SettingHolderSO settingData;
+    public PlayDataHolderSO gameData;
 
-    public SkillClip[] playerkillRegistries;
+    public SkillClip[] playerSkillRegistries;
     public SkillClip[] mobSkillRegistries;
 
     [Header("Parameters")]
@@ -35,11 +37,18 @@ public class GameManager : MonoBehaviour
 
 
     public int currentBeat { get; private set; } //Âß¼­ÅÄ
+    public bool realStarted = false;
+
     private int currentAudioBeat = 0;
 
     public TimelineManager.BeatEvent onHeavyBeat = () => { };
     public TimelineManager.BeatEvent onNormalBeat = () => { };
     public TimelineManager.BeatEvent onBeat = () => { };
+    public TimelineManager.BeatEvent onJudgmentEndTick = () => { };
+
+    public TimelineManager.BeatEvent onGameStart = () => { };
+
+
 
     public double audioOffset
     {
@@ -53,7 +62,9 @@ public class GameManager : MonoBehaviour
     public void BattleStart()
     {
         if (!isStarted) {
+            gameData.ResetData();
             isStarted = true;
+            realStarted = false;
 
             currentBeat = 0;
             currentAudioBeat = 0;
@@ -63,6 +74,8 @@ public class GameManager : MonoBehaviour
             timeline.s_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
             timeline.s_JudgmentInterval_additional = ms_JudgmentInterval_add / 1000.0;
             timeline.Start(bpm);
+            GridManager.Instance.InitBattlePos();
+            onGameStart();
         }
         else
         {
@@ -71,17 +84,40 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void JudgmentEnd()
+    {
+        if(realStarted)
+        {
+            onJudgmentEndTick();
+        }
+        else
+        {
+            if(currentBeat >= 4)
+            {
+                realStarted = true;
+                currentBeat = 0;
+                lastSucessBeat = 0;
+            }
+        }
+    }
+
+
     public int GetModifiedCurrBeat()
     {
         return Math.Max(currentBeat, lastSucessBeat);
     }
 
+    public void HurtPlayer(int dmg)
+    {
+        gameData.playerHealth -= dmg;
+    }
 
     public void BattleEnd()
     {
         if(isStarted)
         {
             isStarted = false;
+            realStarted = false;
         }
     }
 
@@ -89,28 +125,55 @@ public class GameManager : MonoBehaviour
     {
         if (isStarted)
         {
-            timeline.Tick();
+            timeline.Tick(lastSucessBeat >= currentBeat);
         }
+    }
+
+    public bool suspend { get => timeline.suspend; }
+
+    public void Suspend()
+    {
+        timeline.Suspend();
+    }
+
+    public void Resume()
+    {
+        timeline.Resume();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+       
         timeline.onBaseBeat = onBaseBeat;
         timeline.onLogicBaseBeat = onLogicBaseBeat;
+        timeline.onJudgmentEndTick = JudgmentEnd;
 
-        playerkillRegistries = skillActionSheet.BakePlayerSkill();
+        playerSkillRegistries = skillActionSheet.BakePlayerSkill();
         mobSkillRegistries = skillActionSheet.mobSkillRegistries;
+
+        GridManager.Instance.InitBattlePos();
+
+        if (!DebugManager.Instance.debugMode) {
+            StartCoroutine(PlayModeStart());
+        }
     }
 
+    IEnumerator PlayModeStart()
+    {
+        yield return new WaitForSeconds(1);
+        BattleStart();
+    }
 
-
+    public void AddScore(int score)
+    {
+        gameData.Score += score;
+    }
 
     void onBaseBeat()
     {
-
         ++currentAudioBeat;
-        onBeat();
+        //onBeat();
         if((currentAudioBeat - 1) % 4 == 0)
         {
             AudioManager.Instance.PlayAudio("heavybeat");
@@ -123,25 +186,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    
     void onLogicBaseBeat()
     {
-        print("bb");
+        //print("bb");
         ++currentBeat;
-        onBeat();
-        if ((currentBeat - 1) % 4 == 0)
+        if (realStarted)
         {
-            //AudioManager.Instance.PlayAudio("heavybeat");
-            onHeavyBeat();
+            if ((currentBeat - 1) % 4 == 0)
+            {
+                //AudioManager.Instance.PlayAudio("heavybeat");
+                onHeavyBeat();
+            }
+            else
+            {
+                //AudioManager.Instance.PlayAudio("beat");
+                onNormalBeat();
+            }
+            onBeat();
         }
         else
         {
-            //AudioManager.Instance.PlayAudio("beat");
-            onNormalBeat();
+            if(currentBeat >= 5)
+            {
+                realStarted = true;
+                currentBeat = 1;
+                lastSucessBeat = 0;
+            }
         }
+        
     }
+
 
     public int Judgment()
     {
+        if (!realStarted) return -1;
         if (GetModifiedCurrBeat() >= currentBeat && timeline.JudgmentThisBeatAdditional())
         {
             return currentBeat;

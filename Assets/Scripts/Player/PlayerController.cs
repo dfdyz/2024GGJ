@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static SkillActionSheetSO;
+using static UnityEditor.ShaderData;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,12 +16,20 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float moveSmooth = 0.25f;
 
-
-
     [Header("Display")]
     public HashSet<int> matchedSkill = new HashSet<int>();
-    public int Health;
+    public int combo = 0;
+    public int faceDir = 1;
+
+    private bool skillHandled = false;
+
     private PlayerInputBuffer inputCache = new PlayerInputBuffer(8);
+
+    public int Health
+    {
+        get => GameManager.Instance.gameData.playerHealth;
+        set => GameManager.Instance.gameData.playerHealth = value;
+    }
 
 
     // Start is called before the first frame update
@@ -28,9 +37,17 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.onBeat = onBeat;
         GameManager.Instance.onHeavyBeat = onHeavyBeat;
-        GameManager.Instance.timeline.onJudgmentEndTick = onJudgmentEnd;
+        GameManager.Instance.onNormalBeat = onNormalBeat;
+        GameManager.Instance.onJudgmentEndTick = onJudgmentEnd;
+
+        GameManager.Instance.onGameStart += () =>
+        {
+            Health = MaxHealth;
+        };
 
         DebugManager.Instance.debugWindowAttachmentFunc += DebugInfo;
+
+
     }
 
     void DebugInfo()
@@ -43,6 +60,8 @@ public class PlayerController : MonoBehaviour
             str += i.ToString() + " ";
         }
         GUILayout.Label(str);
+
+        GUILayout.Label("Combo: "+combo);
     }
 
     public void ResetPlayer()
@@ -56,7 +75,8 @@ public class PlayerController : MonoBehaviour
     int judgmentBeat = 0;
     void Update()
     {
-        if (!GameManager.Instance.isStarted) return;
+        MovementVisual();
+        if (!GameManager.Instance.isStarted || !GameManager.Instance.realStarted) return;
 
         if (Input.anyKeyDown)
         {
@@ -68,10 +88,10 @@ public class PlayerController : MonoBehaviour
                     if (HandleJudgmentFirst())
                     {
                         GameManager.Instance.lastSucessBeat = judgmentBeat;
-                        print("Beated");
+                        //print("Beated");
                     }
                 }
-                else     //first
+                else     //second
                 {
                     HandleJudgmentSecond();
                 }
@@ -80,32 +100,43 @@ public class PlayerController : MonoBehaviour
             {
                 if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.J))
                 {
-                    print("Miss");
+                    combo = 0;
+                    GameManager.Instance.HurtPlayer(10);
                 }
             }
         }
 
-        MovementVisual();
+        
     }
 
-    void MatchAllSkill()
+    [SerializeField]
+    bool attachMatch = false;
+
+    void ResetMatch()
     {
         matchedSkill.Clear();
-        for (int i = 0; i < GameManager.Instance.playerkillRegistries.Length; i++)
+        for (int i = 0; i < GameManager.Instance.playerSkillRegistries.Length; i++)
         {
             matchedSkill.Add(i);
         }
+        skillHandled = false;
     }
 
     int slot;
     bool HandleJudgmentFirst()
     {
         //print(judgmentBeat + " " + GameManager.Instance.currentBeat);
-        slot = (judgmentBeat - 1) % 4;
+        slot = (judgmentBeat - 1) % 4 + (attachMatch ? 4:0);
+
+        GameManager.Instance.gameData.Combo(++combo);
+
+        bool attach = slot == 0 && judgmentBeat > GameManager.Instance.currentBeat && matchedSkill.Count > 0;
+        slot += attach && slot < 4 ? 4 : 0;
+
         if (slot == 0) //clear input cache
         {
             inputCache.Clear();
-            MatchAllSkill();
+            ResetMatch();
         }
 
         bool flag = false;
@@ -114,7 +145,8 @@ public class PlayerController : MonoBehaviour
         {
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveL);
 
-            GridManager.Instance.playerAt -= 1;
+            selfPos -= 1;
+            faceDir = -1;
 
             MatchAndHandleSkill();
 
@@ -124,7 +156,9 @@ public class PlayerController : MonoBehaviour
         {
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveR);
 
-            GridManager.Instance.playerAt += 1;
+            selfPos += 1;
+
+            faceDir = 1;
 
             MatchAndHandleSkill();
 
@@ -147,24 +181,254 @@ public class PlayerController : MonoBehaviour
     {
         MatchSkill();
 
+        if(slot >= 4) // 溢出
+        {
+            if(matchedSkill.Count > 0) // 正确连招
+            {
+                attachMatch = true;
+            }
+            else   // 错误连招
+            {
+                attachMatch = false;
+                if (inputCache.bufferedCount >= 4)  // 炸了需要重开
+                {
+                    inputCache.MoveForward();
+                    slot %= 4;
+
+                    ResetMatch();
+                    ReMatchSkill();
+                }
+
+
+ 
+
+            }
+        }
+        else
+        {
+            
+
+            
+        }
         // handle All Matched Skill
 
+        if (!skillHandled)
+        {
+            foreach (int id in matchedSkill)
+            {
+                SkillClip sc = GameManager.Instance.playerSkillRegistries[id];
 
+                SkillPhase phase = sc.phases[slot];
+                if (phase.inputClip == inputCache.bufferedInput[slot])
+                {
+                    if (slot + 1 == sc.phases.Length)// skill
+                    {
+                        skillHandled = true;
+                    }
+                    HandlePhase(phase);
+                }
+            }
+        }
     }
+
+    int selfPos { 
+        get => GridManager.Instance.playerAt;
+        set => GridManager.Instance.playerAt = value;
+    }
+    int enemyPos { 
+        get
+        {
+            if (isHyperInput()) //超前
+            {
+                return GridManager.Instance.enemyCtrl.GetNextPos();
+            }
+            return GridManager.Instance.enemyAt;
+        }
+    }
+    bool isHyperInput()
+    {
+        return GameManager.Instance.lastSucessBeat > GameManager.Instance.currentBeat;
+    }
+    float GetScoreUpper(int step)
+    {
+        int level = combo / step;
+        return 1.0f + (0.1f * level);
+    }
+
+    void HandlePhase(SkillPhase phase)
+    {
+        //print(phase.type);
+        switch(phase.type)
+        {
+            case PhaseType.Attack:
+                if (faceDir > 0)
+                { // right
+                    if (enemyPos >= selfPos && enemyPos <= selfPos + phase.phaseData[0])
+                    {
+                        GameManager.Instance.AddScore((int)(GetScoreUpper(4) * phase.phaseData[1]));
+                        if(phase.phaseData.Length >= 3) // stun enemy
+                        {
+                            GridManager.Instance.enemyCtrl.Stun(isHyperInput());
+                        }
+                    }
+                }
+                else // left
+                {
+                    if (enemyPos <= selfPos && enemyPos >= selfPos - phase.phaseData[0])
+                    {
+                        GameManager.Instance.AddScore((int)(GetScoreUpper(4) * phase.phaseData[1]));
+                        if (phase.phaseData.Length >= 3) // stun enemy
+                        {
+                            GridManager.Instance.enemyCtrl.Stun(isHyperInput());
+                        }
+                    }
+                }
+
+                break;
+
+            case PhaseType.AttachMovement:
+                selfPos += faceDir * phase.phaseData[0];
+                break;
+
+            case PhaseType.AttachMovementWithAttack:
+                selfPos += faceDir * phase.phaseData[0];
+
+                if (faceDir > 0)
+                { // right
+                    if (enemyPos >= selfPos - phase.phaseData[0] - 1 && enemyPos <= selfPos)
+                    {
+                        GameManager.Instance.AddScore((int)(GetScoreUpper(4) * phase.phaseData[1]));
+                        if (phase.phaseData.Length >= 3) // stun enemy
+                        {
+                            GridManager.Instance.enemyCtrl.Stun(isHyperInput());
+                        }
+                    }
+                }
+                else // left
+                {
+                    if (enemyPos <= selfPos + phase.phaseData[0] + 1 && enemyPos >= selfPos)
+                    {
+                        GameManager.Instance.AddScore((int)(GetScoreUpper(4) * phase.phaseData[1]));
+                        if (phase.phaseData.Length >= 3) // stun enemy
+                        {
+                            GridManager.Instance.enemyCtrl.Stun(isHyperInput());
+                        }
+                    }
+                }
+
+                break;
+            case PhaseType.Normal:
+            default:
+                break;
+        }
+
+        if(phase.effect != "") print(phase.effect);
+    }
+
+
 
     void onJudgmentEnd()
     {
+        // 匹配不动
         MatchSkill(true);
+        if(slot > 3 && matchedSkill.Count > 0) // 溢出检测
+        {
+            attachMatch = true;
+        }
+
+        if(attachMatch && matchedSkill.Count == 0) // 溢出炸了需要重开
+        {
+            inputCache.MoveForward();
+            attachMatch = false;
+            ResetMatch();
+            ReMatchSkill();
+        }
     }
 
-    void MatchSkill(bool isEndJudgment = false)
+    #region Folder1
+    void ReMatchSkill()
     {
-        SkillClip[] playerkillRegistries = GameManager.Instance.playerkillRegistries;
-
+        SkillClip[] playerkillRegistries = GameManager.Instance.playerSkillRegistries;
         matchedSkill.RemoveWhere((id) =>
         {
             SkillPhase[] phases = playerkillRegistries[id].phases;
 
+            if (phases.Length < slot + 1) return true;
+
+            for (int i = 0; i <= inputCache.bufferedCount; ++i)
+            {
+                if(ShouldDeleteSingle(phases[i], i))
+                {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+    public bool ShouldDeleteSingle(SkillPhase phase, int bufferSlot)
+    {
+        if (phase.inputClip.count == 1)
+        {
+            if (phase.inputClip != inputCache.bufferedInput[bufferSlot])
+            {
+                return true;
+            }
+        }
+        else if (phase.inputClip.count == 2)
+        {
+            if (inputCache.bufferedInput[bufferSlot].count == 0) return true;
+            if (inputCache.bufferedInput[bufferSlot].count == 1) // 已经一次输入
+            {
+                if (inputCache.bufferedInput[bufferSlot].types[0] == PlayerInputBuffer.InputType.Accept) // Accept特判
+                {
+                    if (phase.inputClip.types[0] != PlayerInputBuffer.InputType.Accept
+                    && phase.inputClip.types[1] != PlayerInputBuffer.InputType.Accept)
+                    {
+                        //print("One_ACC");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (phase.inputClip.types[0] != inputCache.bufferedInput[bufferSlot].types[0])
+                    {
+                        //print("One: " + phase.inputClip.types[0] + " " + inputCache.bufferedInput[bufferSlot].types[0] + " " + slot);
+                        return true;
+                    }
+                }
+            }
+            else // 两次输入
+            {
+                if (phase.inputClip != inputCache.bufferedInput[bufferSlot])
+                {
+                    print("Double: " + phase.inputClip.GetHashCode() + " " + inputCache.bufferedInput[bufferSlot].GetHashCode() + " " + slot);
+                    return true;
+                }
+            }
+        }
+        else if (phase.inputClip.count > 2) //缺省
+        {
+            return false;
+        }
+        else // 原地不动
+        {
+            if (inputCache.bufferedInput[bufferSlot].GetHashCode() != 0)
+            {
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+
+    void MatchSkill(bool isEndJudgment = false)
+    {
+        SkillClip[] playerkillRegistries = GameManager.Instance.playerSkillRegistries;
+
+        matchedSkill.RemoveWhere((id) =>
+        {
+            SkillPhase[] phases = playerkillRegistries[id].phases;
 
             if (isEndJudgment)
             {
@@ -177,82 +441,28 @@ public class PlayerController : MonoBehaviour
                         {
                             return true;
                         }
-                        
                     }
                 }
-
-
 
                 return false;
             }
 
 
             if (phases.Length < slot + 1) return true;
-            else //if (phases.Length == slot+1)
-            {
-                if (phases[slot].inputClip.count == 1)
-                {
-                    if (phases[slot].inputClip != inputCache.bufferedInput[slot])
-                    {
-                        return true;
-                    }
-                }
-                else if (phases[slot].inputClip.count == 2)
-                {
-                    if (inputCache.bufferedInput[slot].count == 1) // 一次输入
-                    {
-                        if (inputCache.bufferedInput[slot].types[0] == PlayerInputBuffer.InputType.Accept) // Accept特判
-                        {
-                            if (phases[slot].inputClip.types[0] != PlayerInputBuffer.InputType.Accept
-                            && phases[slot].inputClip.types[1] != PlayerInputBuffer.InputType.Accept)
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                        {
-                            if (phases[slot].inputClip.types[0] != inputCache.bufferedInput[slot].types[0])
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    else // 两次输入
-                    {
-                        if (phases[slot].inputClip != inputCache.bufferedInput[slot])
-                        {
-                            return true;
-                        }
-                    }
-                }
-                else if (phases[slot].inputClip.count > 2) //缺省
-                {
-
-                }
-                else // 原地不动
-                {
-                    return true;
-                }
-
-            }
-
-
-            return false;
+            else return ShouldDeleteSingle(phases[slot], slot);
         });
     }
 
-
     void HandleJudgmentSecond()
     {
-        slot = (judgmentBeat - 1) % 4;
+        //slot = (judgmentBeat - 1) % 4;
         if (Input.GetKeyDown(KeyCode.A)) //Move L
         {
             if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlayerInputBuffer.InputType.Accept)
             {
-                GridManager.Instance.playerAt -= 1;
+                selfPos -= 1;
+                faceDir = -1;
             }
-
-           
 
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveL);
 
@@ -263,14 +473,15 @@ public class PlayerController : MonoBehaviour
         {
             if (inputCache.GetBufferedCount(slot) == 1 && inputCache.GetBufferedType(slot, 0) == PlayerInputBuffer.InputType.Accept)
             {
-                GridManager.Instance.playerAt += 1;
+                selfPos += 1;
+                faceDir = 1;
             }
 
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveR);
 
             MatchAndHandleSkill();
         }
-        if (Input.GetKeyDown(KeyCode.J)) //Atk`                             
+        if (Input.GetKeyDown(KeyCode.J)) //Atk                       
         {
             inputCache.Put(slot, PlayerInputBuffer.InputType.Accept);
 
@@ -280,29 +491,52 @@ public class PlayerController : MonoBehaviour
 
     void onBeat()
     {
-        if(GameManager.Instance.currentBeat % 4 == 3)// try clear player input buffer
-        {
 
-        }
     }
+
+    #endregion
 
     void onHeavyBeat()
     {
-        if(GameManager.Instance.lastSucessBeat == GameManager.Instance.currentBeat)
+        // 没超前操作
+        if (GameManager.Instance.lastSucessBeat < GameManager.Instance.currentBeat)
+        {
+            ++slot;
+            if (matchedSkill.Count > 0) // 还有连招
+            {
+                attachMatch = true;
+                inputCache.ResetSlotBehind(slot);
+                //inputCache.PutBufferEmpty(slot);
+            }
+            else // 没连招了
+            {
+                inputCache.Clear();
+                ResetMatch();
+                slot = 0;
+            }
+        }
+
+
+        if (GameManager.Instance.lastSucessBeat == GameManager.Instance.currentBeat)
         {
 
         }
         else
         {
-            inputCache.Clear();
-            MatchAllSkill();
+            // 没超前操作
+            
+
         }
     }
 
-
-
-
-
+    void onNormalBeat()
+    {
+        if (GameManager.Instance.lastSucessBeat < GameManager.Instance.currentBeat) // 没有超前操作
+        {
+            ++slot;
+            inputCache.ResetSlotBehind(slot);
+        }
+    }
 
     private void FixedUpdate()
     {
