@@ -191,22 +191,43 @@ MonoBehaviour:
     - type: 1
       phaseData: 
       inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
         types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000001000000
         count: 0
       audio: 
       effect: 
     - type: 1
       phaseData: 
       inputClip:
-        types: 0000000000000000
-        count: 1
+        types: 0100000001000000
+        count: 0
       audio: 
       effect: 
     - type: 1
       phaseData: 
       inputClip:
-        types: 0200000002000000
-        count: 1
+        types: 0100000002000000
+        count: 2
       audio: 
       effect: 
   mobSkillRegistries: []
