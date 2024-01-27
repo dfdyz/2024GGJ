@@ -285,7 +285,7 @@ public class PlayerController : MonoBehaviour
 
     void onHeavyBeat()
     {
-        if(GameManager.Instance.GetModifiedCurrBeat() == GameManager.Instance.currentBeat)
+        if(GameManager.Instance.lastSucessBeat == GameManager.Instance.currentBeat)
         {
 
         }

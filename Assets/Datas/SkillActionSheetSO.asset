@@ -29,4 +29,20 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
+  - name: Test
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0100000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 2
+      audio: 
+      effect: 
   mobSkillRegistries: []
