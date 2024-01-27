@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: SettingHolderSO
   m_EditorClassIdentifier: 
   audioOffset: 0.2
+  DebugMode: 0

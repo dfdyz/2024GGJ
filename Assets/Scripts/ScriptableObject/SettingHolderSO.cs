@@ -4,4 +4,7 @@ using UnityEngine;
 public class SettingHolderSO : ScriptableObject
 {
     public double audioOffset;
+
+
+    public bool DebugMode = true;
 }

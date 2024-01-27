@@ -30,10 +30,8 @@ public class GridManager : MonoBehaviour
         Instance = this;
         int gridCounts = radius * 2 + dangerAreaSize * 2 + 1;
         grids = new GridCtrl[gridCounts];
+
     }
-
-
-
 
     GridCtrl InstantiateGrid()
     {
@@ -67,17 +65,11 @@ public class GridManager : MonoBehaviour
         return grids[GetRealPos(enemyAt, 0)].GetLandingPos();
     }
 
-
-    public void MovePlayer(int dir)
+    public void InitBattlePos()
     {
-        
+        enemyAt = radius + dangerAreaSize + 1;
+        playerAt = enemyAt - 5;
     }
-
-    public void MoveEnemy(int dir)
-    {
-        
-    }
-
 
     public void SetupGrid()
     {

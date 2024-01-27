@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Concurrent;
 using UnityEngine;
 
 public class TimelineManager
@@ -39,11 +37,37 @@ public class TimelineManager
     double nextBeat = 0;
     double nextLogicBeat = 0;
     double nextJudgmentEnd = 0;
+
+    public bool suspend { get; private set; } = false;
+
+    public void Suspend()
+    {
+        suspend = true;
+    }
+
+    public void Resume()
+    {
+        suspend = false;
+    }
+
+    double lastTick = 0;
     public void Tick(bool additionalJudgment)
     {
+        double thisTick = Time.realtimeSinceStartupAsDouble;
+        if (suspend)
+        {
+            double deltaTick = thisTick - lastTick;
+            lastBeatTick += deltaTick;
+            lastLogicBeatTick += deltaTick;
+            lastJudgmentBeatTick += deltaTick;
+
+            lastTick = thisTick;
+            return;
+        }
+        lastTick = thisTick;
 
         //base beat(audio)
-        double thisTick = Time.realtimeSinceStartupAsDouble;
+
         nextBeat = GetNextBaseBeatTick();
         if (thisTick >= nextBeat)
         {
@@ -67,7 +91,7 @@ public class TimelineManager
             onJudgmentEndTick();
         }
 
-
+        
         //UnityEngine.Debug.Log("next beat: " + nextBeat);
         //UnityEngine.Debug.Log("time: " + Time.realtimeSinceStartupAsDouble);
     }
@@ -102,6 +126,7 @@ public class TimelineManager
         lastBeatTick = startedTick;
         lastLogicBeatTick = lastBeatTick + judgmentOffset;
         lastJudgmentBeatTick = lastLogicBeatTick + s_JudgmentInterval_pos;
+        lastTick = startedTick;
     }
 
     public double GetNextBaseBeatTick()

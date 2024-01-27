@@ -41,7 +41,7 @@ public class EnemyCtrl : MonoBehaviour
             nextSkillBeat = 1;
         };
 
-        GameManager.Instance.timeline.onJudgmentEndTick += delayJudgment;
+        GameManager.Instance.onJudgmentEndTick += delayJudgment;
 
         GridManager.Instance.enemyCtrl = this;
     }
@@ -51,8 +51,8 @@ public class EnemyCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.Instance.isStarted) return;
         MovementVisual();
+        if (!GameManager.Instance.isStarted) return;
     }
 
     private void FixedUpdate()

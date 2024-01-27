@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.onBeat = onBeat;
         GameManager.Instance.onHeavyBeat = onHeavyBeat;
         GameManager.Instance.onNormalBeat = onNormalBeat;
-        GameManager.Instance.timeline.onJudgmentEndTick = onJudgmentEnd;
+        GameManager.Instance.onJudgmentEndTick = onJudgmentEnd;
 
         GameManager.Instance.onGameStart += () =>
         {
@@ -75,7 +75,8 @@ public class PlayerController : MonoBehaviour
     int judgmentBeat = 0;
     void Update()
     {
-        if (!GameManager.Instance.isStarted) return;
+        MovementVisual();
+        if (!GameManager.Instance.isStarted || !GameManager.Instance.realStarted) return;
 
         if (Input.anyKeyDown)
         {
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        MovementVisual();
+        
     }
 
     [SerializeField]
