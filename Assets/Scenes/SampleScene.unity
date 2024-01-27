@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa901ef60026c3649bc2d8fae8ce82ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillActionSheets: {fileID: 0}
+  skillActionSheets: {fileID: 11400000, guid: c974db170584f5c46a1e48e7f07a2bc8, type: 2}
   bpm: 120
   ms_JudgmentInterval_pos: 120
   ms_JudgmentInterval_neg: 80
@@ -528,6 +528,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSmooth: 0.25
   nextSkillBeat: 0
+  faceDir: 1
+  currPhase: 0
   currentSkill:
     name: 
     phases: []

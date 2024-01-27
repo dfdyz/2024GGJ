@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
     public int lastSucessBeat = 0;
 
 
-    public int currentBeat { get; private set; }
+    public int currentBeat { get; private set; } //Âß¼­ÅÄ
+    private int currentAudioBeat = 0;
 
     public TimelineManager.BeatEvent onHeavyBeat = () => { };
     public TimelineManager.BeatEvent onNormalBeat = () => { };
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
             isStarted = true;
 
             currentBeat = 0;
+            currentAudioBeat = 0;
             lastSucessBeat = 0;
 
             timeline.ms_JudgmentInterval_pos = ms_JudgmentInterval_pos / 1000.0;
@@ -90,7 +92,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         timeline.onBaseBeat = onBaseBeat;
-        audioOffset = 0.16;
+        timeline.onLogicBaseBeat = onLogicBaseBeat;
+        audioOffset = 0.18;
     }
 
 
@@ -98,16 +101,32 @@ public class GameManager : MonoBehaviour
 
     void onBaseBeat()
     {
-        ++currentBeat;
+        ++currentAudioBeat;
         onBeat();
-        if((currentBeat - 1) % 4 == 0)
+        if((currentAudioBeat - 1) % 4 == 0)
         {
             AudioManager.Instance.PlayAudio("heavybeat");
-            onHeavyBeat();
+            //onHeavyBeat();
         }
         else
         {
             AudioManager.Instance.PlayAudio("beat");
+            //onNormalBeat();
+        }
+    }
+
+    void onLogicBaseBeat()
+    {
+        ++currentBeat;
+        onBeat();
+        if ((currentBeat - 1) % 4 == 0)
+        {
+            //AudioManager.Instance.PlayAudio("heavybeat");
+            onHeavyBeat();
+        }
+        else
+        {
+            //AudioManager.Instance.PlayAudio("beat");
             onNormalBeat();
         }
     }

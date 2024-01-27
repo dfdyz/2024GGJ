@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using static SkillActionSheetSO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSmooth = 0.25f;
 
 
+
     [Header("Display")]
+    public HashSet<int> matchedSkill = new HashSet<int>();
     public int Health;
 
     private PlayerInputBuffer inputCache = new PlayerInputBuffer(8);
@@ -24,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.onBeat = onBeat;
         GameManager.Instance.onHeavyBeat = onHeavyBeat;
+        GameManager.Instance.timeline.onJudgmentEndTick = onJudgmentEnd;
 
         DebugManager.Instance.debugWindowAttachmentFunc += DebugInfo;
     }
@@ -31,6 +37,13 @@ public class PlayerController : MonoBehaviour
     void DebugInfo()
     {
         GUILayout.Label(inputCache.ToString());
+
+        string str = "\n";
+        foreach (int i in matchedSkill)
+        {
+            str += i.ToString() + " ";
+        }
+        GUILayout.Label(str);
     }
 
     public void ResetPlayer()
@@ -59,7 +72,7 @@ public class PlayerController : MonoBehaviour
                         print("Beated");
                     }
                 }
-                else
+                else     //first
                 {
                     HandleJudgmentSecond();
                 }
@@ -73,7 +86,14 @@ public class PlayerController : MonoBehaviour
         MovementVisual();
     }
 
-
+    void MatchAllSkill()
+    {
+        matchedSkill.Clear();
+        for (int i = 0; i < GameManager.Instance.skillActionSheets.playerkillRegistries.Length; i++)
+        {
+            matchedSkill.Add(i);
+        }
+    }
 
     int slot;
     bool HandleJudgmentFirst()
@@ -83,6 +103,7 @@ public class PlayerController : MonoBehaviour
         if (slot == 0) //clear input cache
         {
             inputCache.Clear();
+            MatchAllSkill();
         }
 
         bool flag = false;
@@ -93,6 +114,8 @@ public class PlayerController : MonoBehaviour
 
             GridManager.Instance.playerAt -= 1;
 
+            MatchAndHandleSkill();
+
             flag = true;
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
@@ -101,11 +124,16 @@ public class PlayerController : MonoBehaviour
 
             GridManager.Instance.playerAt += 1;
 
+            MatchAndHandleSkill();
+
             flag = true;
         }
+
         if(Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
             inputCache.Put(slot, PlayerInputBuffer.InputType.Accept);
+
+            MatchAndHandleSkill();
 
             flag = true;
         }
@@ -113,6 +141,84 @@ public class PlayerController : MonoBehaviour
         return flag;
     }
 
+    void MatchAndHandleSkill()
+    {
+        MatchSkill();
+
+        // handle All Matched Skill
+
+
+    }
+
+    void onJudgmentEnd()
+    {
+        MatchSkill();
+    }
+
+    void MatchSkill()
+    {
+        SkillClip[] playerkillRegistries = GameManager.Instance.skillActionSheets.playerkillRegistries;
+
+        matchedSkill.RemoveWhere((id) =>
+        {
+            SkillPhase[] phases = playerkillRegistries[id].phases;
+
+            if (phases.Length < slot + 1) return true;
+            else //if (phases.Length == slot+1)
+            {
+                if (phases[slot].inputClip.count == 1)
+                {
+                    if (phases[slot].inputClip != inputCache.bufferedInput[slot])
+                    {
+                        return true;
+                    }
+                }
+                else if (phases[slot].inputClip.count == 2)
+                {
+                    if (inputCache.bufferedInput[slot].count == 1) // 一次输入
+                    {
+                        if (inputCache.bufferedInput[slot].types[0] == PlayerInputBuffer.InputType.Accept) // Accept特判
+                        {
+                            if (phases[slot].inputClip.types[0] != PlayerInputBuffer.InputType.Accept
+                            && phases[slot].inputClip.types[1] != PlayerInputBuffer.InputType.Accept)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (phases[slot].inputClip.types[0] != inputCache.bufferedInput[slot].types[0])
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else // 两次输入
+                    {
+                        if (phases[slot].inputClip != inputCache.bufferedInput[slot])
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else if (phases[slot].inputClip.count > 2) //缺省
+                {
+
+                }
+                else // 原地不动
+                {
+                    return true;
+                }
+
+            }
+
+
+            return false;
+        });
+    }
+
+
+    
     
 
 
@@ -126,8 +232,12 @@ public class PlayerController : MonoBehaviour
                 GridManager.Instance.playerAt -= 1;
             }
 
+           
 
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveL);
+
+            MatchAndHandleSkill();
+
         }
         if (Input.GetKeyDown(KeyCode.D)) //Move R
         {
@@ -137,10 +247,14 @@ public class PlayerController : MonoBehaviour
             }
 
             inputCache.Put(slot, PlayerInputBuffer.InputType.MoveR);
+
+            MatchAndHandleSkill();
         }
         if (Input.GetKeyDown(KeyCode.J)) //Atk`                             
         {
             inputCache.Put(slot, PlayerInputBuffer.InputType.Accept);
+
+            MatchAndHandleSkill();
         }
     }
 
@@ -160,13 +274,14 @@ public class PlayerController : MonoBehaviour
 
     void onHeavyBeat()
     {
-        if(GameManager.Instance.lastSucessBeat == GameManager.Instance.currentBeat)
+        if(GameManager.Instance.GetModifiedCurrBeat() == GameManager.Instance.currentBeat)
         {
 
         }
         else
         {
             inputCache.Clear();
+            MatchAllSkill();
         }
     }
 

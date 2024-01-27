@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f33ed80192fb8946828730d6278a9fd, type: 3}
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
-  playerkillRegistries: []
+  playerkillRegistries:
+  - name: Test
+    phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 1
+      audio: 
+      effect: 
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 0000000000000000
+        count: 2
+      audio: 
+      effect: 
   mobSkillRegistries: []

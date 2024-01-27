@@ -1,69 +1,86 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerInputBuffer
 {
-
-    InputClip[] buffer;
+    public int bufferedCount { get; private set; } = 0;
+    public InputClip[] bufferedInput { get; private set; }
+    public HashSet<int> matchedSkill { get; private set; } = new HashSet<int>();
+    public HashSet<int> lastMatchedSkill { get; private set; } = new HashSet<int>();
 
     public PlayerInputBuffer(int size)
     {
-        buffer = new InputClip[size];
+        bufferedInput = new InputClip[size];
 
         for (int i = 0; i < size; ++i)
         {
-            buffer[i].Init();
+            bufferedInput[i].Init();
         }
     }
 
     public void Put(int atSlot, InputType inputType)
     {
-        if(!buffer[atSlot].isFull()) buffer[atSlot].types[buffer[atSlot].count++] = inputType;
+        if(!bufferedInput[atSlot].isFull())
+        {
+            if(bufferedInput[atSlot].count == 1)
+            {
+                if (bufferedInput[atSlot].types[0] == InputType.Accept)
+                {
+                    bufferedInput[atSlot].types[1] = bufferedInput[atSlot].types[0];
+                    bufferedInput[atSlot].types[0] = inputType;
+                }
+                else
+                {
+                    bufferedInput[atSlot].types[1] = inputType;
+                }
+            }
+            else
+            {
+                bufferedInput[atSlot].types[0] = inputType;
+            }
+
+            bufferedInput[atSlot].count++;
+        }
+        bufferedCount = Math.Max(bufferedCount, atSlot);
     }
 
     public int GetBufferedCount(int atSlot)
     {
-        return buffer[atSlot].count;
+        return bufferedInput[atSlot].count;
     }
 
     public InputType GetBufferedType(int atSlot, int idx)
     {
-        return buffer[atSlot].types[idx];
+        return bufferedInput[atSlot].types[idx];
     }
 
     public void Clear()
     {
-        for(int i = 0; i < buffer.Length; ++i)
+        for(int i = 0; i < bufferedInput.Length; ++i)
         {
-            buffer[i].Clear();
+            bufferedInput[i].Clear();
         }
+
+        matchedSkill.Clear();
     }
 
     public override string ToString()
     {
         string str = string.Format("[{0}] [{1}] [{2}] [{3}]\n",
-                buffer[0].count > 0 ? Type2Str(buffer[0].types[0]) : "-",
-                buffer[1].count > 0 ? Type2Str(buffer[1].types[0]) : "-",
-                buffer[2].count > 0 ? Type2Str(buffer[2].types[0]) : "-",
-                buffer[3].count > 0 ? Type2Str(buffer[3].types[0]) : "-"
+                bufferedInput[0].count > 0 ? Type2Str(bufferedInput[0].types[0]) : "-",
+                bufferedInput[1].count > 0 ? Type2Str(bufferedInput[1].types[0]) : "-",
+                bufferedInput[2].count > 0 ? Type2Str(bufferedInput[2].types[0]) : "-",
+                bufferedInput[3].count > 0 ? Type2Str(bufferedInput[3].types[0]) : "-"
             );
         str += string.Format("[{0}] [{1}] [{2}] [{3}]",
-                buffer[0].count > 1 ? Type2Str(buffer[0].types[1]) : "-",
-                buffer[1].count > 1 ? Type2Str(buffer[1].types[1]) : "-",
-                buffer[2].count > 1 ? Type2Str(buffer[2].types[1]) : "-",
-                buffer[3].count > 1 ? Type2Str(buffer[3].types[1]) : "-"
+                bufferedInput[0].count > 1 ? Type2Str(bufferedInput[0].types[1]) : "-",
+                bufferedInput[1].count > 1 ? Type2Str(bufferedInput[1].types[1]) : "-",
+                bufferedInput[2].count > 1 ? Type2Str(bufferedInput[2].types[1]) : "-",
+                bufferedInput[3].count > 1 ? Type2Str(bufferedInput[3].types[1]) : "-"
             );
         return str;
-    }
-
-
-
-
-
-    public void MatchSkill(in List<int> skillIds)
-    {
-        // todo
     }
 
 
@@ -86,7 +103,7 @@ public class PlayerInputBuffer
 
 
 
-
+    [Serializable]
     public struct InputClip
     {
         public InputType[] types;
@@ -107,6 +124,31 @@ public class PlayerInputBuffer
         {
             count = 0;
         }
+
+        public override int GetHashCode()
+        {
+            if(count == 0) return 0;
+            else if(count == 1) return Convert.ToInt32(types[0]) + 1;
+            else return Convert.ToInt32(types[0]) + 1 + 10 * Convert.ToInt32(types[1]) + 10;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            return GetHashCode() == obj.GetHashCode();
+        }
+
+
+        public static bool operator ==(InputClip p1, InputClip p2)
+        {
+            return p1.GetHashCode() == p2.GetHashCode();
+        }
+
+        public static bool operator !=(InputClip p1, InputClip p2)
+        {
+            return !(p1 == p2);
+        }
+
 
     }
 

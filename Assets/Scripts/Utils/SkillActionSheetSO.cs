@@ -50,8 +50,9 @@ public class SkillActionSheetSO : ScriptableObject
          * 
          */
 
-        public bool neededOrder; // 需要按顺序按下 input 中的按键
-        public PlayerInputBuffer.InputType[] input;
+
+        
+        public PlayerInputBuffer.InputClip inputClip; 
         /*
             对于玩家：
                 所有合法按键操作
@@ -59,6 +60,18 @@ public class SkillActionSheetSO : ScriptableObject
                 仅移动行为(不需要Accept)
          */
 
+
         public string audio;     // 特殊音效，留空则为默认
+
+        public string effect;
     }
+
+
+
+
+
+
+
+
+
 }
