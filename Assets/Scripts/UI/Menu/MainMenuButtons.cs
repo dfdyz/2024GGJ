@@ -13,6 +13,7 @@ public class MainMenuButtons : MonoBehaviour
 
     [SerializeField] Button SettingButton;
     [SerializeField] Button StartButton;
+    [SerializeField] Button ExitButton;
 
     void Start()
     {
@@ -27,6 +28,10 @@ public class MainMenuButtons : MonoBehaviour
         });
 
         StartButton.onClick.AddListener(StartGame);
+
+        ExitButton.onClick.AddListener(() => {
+            Application.Quit();
+        });
     }
 
     void StartGame()

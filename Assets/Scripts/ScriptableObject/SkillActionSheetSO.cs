@@ -99,8 +99,6 @@ public class SkillActionSheetSO : ScriptableObject
     }
 
 
-
-
     public SkillClip[] BakePlayerSkill()
     {
         SkillClip[] baked = new SkillClip[playerkillRegistries.Length * 2];

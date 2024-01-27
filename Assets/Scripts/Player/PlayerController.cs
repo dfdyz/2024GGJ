@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MovementVisual();
+        UIManager.Instance.healthBar.rate = GameManager.Instance.gameData.playerHealth / (float)MaxHealth;
         if (!GameManager.Instance.isStarted || !GameManager.Instance.realStarted) return;
 
         if (Input.anyKeyDown)
