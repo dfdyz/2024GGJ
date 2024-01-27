@@ -157,12 +157,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillActionSheet: {fileID: 11400000, guid: c974db170584f5c46a1e48e7f07a2bc8, type: 2}
   settingData: {fileID: 11400000, guid: 0d56e41b511df7e4996efcf9086d91f9, type: 2}
+  gameData: {fileID: 11400000, guid: a0c0ca87276d46048a3c41281cf40680, type: 2}
   playerkillRegistries: []
   mobSkillRegistries: []
-  bpm: 120
-  ms_JudgmentInterval_pos: 110
-  ms_JudgmentInterval_neg: 100
-  ms_JudgmentInterval_add: 90
+  bpm: 60
+  ms_JudgmentInterval_pos: 100
+  ms_JudgmentInterval_neg: 80
+  ms_JudgmentInterval_add: 60
   lastSucessBeat: 0
 --- !u!114 &137796652
 MonoBehaviour:
@@ -486,8 +487,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
-  moveSmooth: 0.25
-  Health: 0
+  moveSmooth: 0.2
+  attachMatch: 0
 --- !u!1 &2027287854
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406db84d6cd93bd47b85bc420c8ed1f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSmooth: 0.25
+  moveSmooth: 0.2
   nextSkillBeat: 0
   faceDir: 1
   currPhase: 0

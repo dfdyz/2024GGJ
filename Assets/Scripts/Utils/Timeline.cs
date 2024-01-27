@@ -36,12 +36,10 @@ public class TimelineManager
         this.audioOffsetGetter = audioOffsetGetter;
     }
 
-    
-
     double nextBeat = 0;
     double nextLogicBeat = 0;
     double nextJudgmentEnd = 0;
-    public void Tick()
+    public void Tick(bool additionalJudgment)
     {
 
         //base beat(audio)
@@ -62,7 +60,7 @@ public class TimelineManager
         }
 
         // judgment end
-        nextJudgmentEnd = GetNextJudgmentBeatTick();
+        nextJudgmentEnd = GetNextJudgmentBeatTick(additionalJudgment);
         if (thisTick >= nextJudgmentEnd)
         {
             lastJudgmentBeatTick = nextJudgmentEnd;
@@ -116,9 +114,9 @@ public class TimelineManager
         return lastLogicBeatTick + timePerBeat;
     }
 
-    public double GetNextJudgmentBeatTick()
+    public double GetNextJudgmentBeatTick(bool additionalJudgment)
     {
-        return lastJudgmentBeatTick + timePerBeat;
+        return lastJudgmentBeatTick + timePerBeat + (additionalJudgment ? s_JudgmentInterval_additional:0);
     }
 
     public void SetBpm(double bpm)

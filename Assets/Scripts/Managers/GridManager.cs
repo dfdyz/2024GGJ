@@ -22,6 +22,8 @@ public class GridManager : MonoBehaviour
     [Header("Display")]
     public int playerAt = 0;
     public int enemyAt = 0;
+    public EnemyCtrl enemyCtrl;
+    //public PlayerController playerCtrl;
 
     private void Awake()
     {
@@ -39,8 +41,6 @@ public class GridManager : MonoBehaviour
         GameObject gridins = Instantiate(prefab);
         return gridins.GetComponent<GridCtrl>();
     }
-
-
 
     public void InitGrids()
     {

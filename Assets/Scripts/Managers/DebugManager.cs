@@ -49,6 +49,7 @@ public class DebugManager : MonoBehaviour
 
         GUILayout.Label(string.Format("{0}", (int)(GameManager.Instance.audioOffset * 1000)));
 
+        GUILayout.Label("Score: " + GameManager.Instance.gameData.Score);
 
         debugWindowAttachmentFunc();
 

@@ -46,9 +46,45 @@ public class PlayerInputBuffer
         bufferedCount = Math.Max(bufferedCount, atSlot);
     }
 
+    public void ResetSlotBehind(int slot)
+    {
+        bufferedInput[slot].Clear();
+        PutBufferEmpty(slot);
+        for (int i = slot; i < bufferedInput.Length; ++i)
+        {
+            bufferedInput[i].Clear();
+        }
+    }
+
+    public void PutBufferEmpty(int val)
+    {
+        bufferedInput[val].Clear();
+        bufferedCount = Math.Max(bufferedCount, val);
+    }
+
     public int GetBufferedCount(int atSlot)
     {
         return bufferedInput[atSlot].count;
+    }
+
+    public void MoveForward(int step = 4)
+    {
+        if(bufferedCount+1 >= step)
+        {
+            bufferedCount -= step;
+            for(int i = step; i < bufferedInput.Length; ++i)
+            {
+                bufferedInput[i - 4].count = bufferedInput[i].count;
+                bufferedInput[i].count = 0;
+                bufferedInput[i - 4].types[0] = bufferedInput[i].types[0];
+                bufferedInput[i - 4].types[1] = bufferedInput[i].types[1];
+            }
+        }
+        else
+        {
+            Clear();
+        }
+
     }
 
     public InputType GetBufferedType(int atSlot, int idx)
@@ -64,22 +100,49 @@ public class PlayerInputBuffer
         }
 
         matchedSkill.Clear();
+
+        bufferedCount = 0;
     }
 
     public override string ToString()
     {
-        string str = string.Format("[{0}] [{1}] [{2}] [{3}]\n",
-                bufferedInput[0].count > 0 ? Type2Str(bufferedInput[0].types[0]) : "-",
-                bufferedInput[1].count > 0 ? Type2Str(bufferedInput[1].types[0]) : "-",
-                bufferedInput[2].count > 0 ? Type2Str(bufferedInput[2].types[0]) : "-",
-                bufferedInput[3].count > 0 ? Type2Str(bufferedInput[3].types[0]) : "-"
+        string str = string.Format("[{0}] [{1}] [{2}] [{3}]",
+                bufferedInput[0].count > 0 ? Type2Str(bufferedInput[0].types[0]) : "--",
+                bufferedInput[1].count > 0 ? Type2Str(bufferedInput[1].types[0]) : "--",
+                bufferedInput[2].count > 0 ? Type2Str(bufferedInput[2].types[0]) : "--",
+                bufferedInput[3].count > 0 ? Type2Str(bufferedInput[3].types[0]) : "--"
             );
-        str += string.Format("[{0}] [{1}] [{2}] [{3}]",
-                bufferedInput[0].count > 1 ? Type2Str(bufferedInput[0].types[1]) : "-",
-                bufferedInput[1].count > 1 ? Type2Str(bufferedInput[1].types[1]) : "-",
-                bufferedInput[2].count > 1 ? Type2Str(bufferedInput[2].types[1]) : "-",
-                bufferedInput[3].count > 1 ? Type2Str(bufferedInput[3].types[1]) : "-"
+
+        if(bufferedCount >= 4)
+        {
+            str += string.Format(" [{0}] [{1}] [{2}] [{3}]",
+                bufferedInput[4].count > 0 ? Type2Str(bufferedInput[4].types[0]) : "--",
+                bufferedInput[5].count > 0 ? Type2Str(bufferedInput[5].types[0]) : "--",
+                bufferedInput[6].count > 0 ? Type2Str(bufferedInput[6].types[0]) : "--",
+                bufferedInput[7].count > 0 ? Type2Str(bufferedInput[7].types[0]) : "--"
             );
+
+        }
+
+
+        str += string.Format("\n[{0}] [{1}] [{2}] [{3}]",
+                bufferedInput[0].count > 1 ? Type2Str(bufferedInput[0].types[1]) : "--",
+                bufferedInput[1].count > 1 ? Type2Str(bufferedInput[1].types[1]) : "--",
+                bufferedInput[2].count > 1 ? Type2Str(bufferedInput[2].types[1]) : "--",
+                bufferedInput[3].count > 1 ? Type2Str(bufferedInput[3].types[1]) : "--"
+            );
+
+
+        if (bufferedCount >= 4)
+        {
+            str += string.Format(" [{0}] [{1}] [{2}] [{3}]",
+                bufferedInput[4].count > 0 ? Type2Str(bufferedInput[4].types[1]) : "--",
+                bufferedInput[5].count > 0 ? Type2Str(bufferedInput[5].types[1]) : "--",
+                bufferedInput[6].count > 0 ? Type2Str(bufferedInput[6].types[1]) : "--",
+                bufferedInput[7].count > 0 ? Type2Str(bufferedInput[7].types[1]) : "--"
+            );
+        }
+
         return str;
     }
 

@@ -57,21 +57,23 @@ public class SkillActionSheetSO : ScriptableObject
          * 额外位移攻击 AttachMovementWithAttack
          *      0: 位移距离
          *      1: 伤害（得分？）
+         *      2: 大于0则为打断敌人行动（仅玩家生效），不需要则不填
          * 
          * 攻击 Attack
          *      0: 攻击范围
          *      1: 伤害（得分？）
-         * 
+         *      2: 大于0则为打断敌人行动（仅玩家生效），不需要则不填
          */
 
 
-        
+
         public PlayerInputBuffer.InputClip inputClip; 
         /*
             对于玩家：
                 所有合法按键操作
             对于怪物：
-                仅移动行为(不需要Accept)
+                Move确定移动方向
+                Accept就是原地不动
          */
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Playables;
 using static SkillActionSheetSO;
 
 
@@ -19,8 +20,9 @@ public class GameManager : MonoBehaviour
     [Header("Resources")]
     public SkillActionSheetSO skillActionSheet;
     public SettingHolderSO settingData;
+    public PlayDataHolderSO gameData;
 
-    public SkillClip[] playerkillRegistries;
+    public SkillClip[] playerSkillRegistries;
     public SkillClip[] mobSkillRegistries;
 
     [Header("Parameters")]
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
     public TimelineManager.BeatEvent onNormalBeat = () => { };
     public TimelineManager.BeatEvent onBeat = () => { };
 
+    public TimelineManager.BeatEvent onGameStart = () => { };
+
     public double audioOffset
     {
         get => settingData.audioOffset;
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void BattleStart()
     {
         if (!isStarted) {
+            gameData.ResetData();
             isStarted = true;
 
             currentBeat = 0;
@@ -63,6 +68,8 @@ public class GameManager : MonoBehaviour
             timeline.s_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
             timeline.s_JudgmentInterval_additional = ms_JudgmentInterval_add / 1000.0;
             timeline.Start(bpm);
+
+            onGameStart();
         }
         else
         {
@@ -76,6 +83,10 @@ public class GameManager : MonoBehaviour
         return Math.Max(currentBeat, lastSucessBeat);
     }
 
+    public void HurtPlayer(int dmg)
+    {
+        gameData.playerHealth -= dmg;
+    }
 
     public void BattleEnd()
     {
@@ -89,7 +100,7 @@ public class GameManager : MonoBehaviour
     {
         if (isStarted)
         {
-            timeline.Tick();
+            timeline.Tick(lastSucessBeat >= currentBeat);
         }
     }
 
@@ -99,18 +110,20 @@ public class GameManager : MonoBehaviour
         timeline.onBaseBeat = onBaseBeat;
         timeline.onLogicBaseBeat = onLogicBaseBeat;
 
-        playerkillRegistries = skillActionSheet.BakePlayerSkill();
+        playerSkillRegistries = skillActionSheet.BakePlayerSkill();
         mobSkillRegistries = skillActionSheet.mobSkillRegistries;
     }
 
-
-
+    public void AddScore(int score)
+    {
+        gameData.Score += score;
+    }
 
     void onBaseBeat()
     {
 
         ++currentAudioBeat;
-        onBeat();
+        //onBeat();
         if((currentAudioBeat - 1) % 4 == 0)
         {
             AudioManager.Instance.PlayAudio("heavybeat");
@@ -125,9 +138,8 @@ public class GameManager : MonoBehaviour
 
     void onLogicBaseBeat()
     {
-        print("bb");
+        //print("bb");
         ++currentBeat;
-        onBeat();
         if ((currentBeat - 1) % 4 == 0)
         {
             //AudioManager.Instance.PlayAudio("heavybeat");
@@ -138,6 +150,7 @@ public class GameManager : MonoBehaviour
             //AudioManager.Instance.PlayAudio("beat");
             onNormalBeat();
         }
+        onBeat();
     }
 
     public int Judgment()
