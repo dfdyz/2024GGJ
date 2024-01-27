@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: SettingHolderSO
   m_EditorClassIdentifier: 
   audioOffset: 0.2
-  DebugMode: 0
+  subsectionCount: 24
+  scoreLevels:
+  - Text: C
+    scoreLine: 0
+  - Text: B
+    scoreLine: 5000
+  - Text: A
+    scoreLine: 10000
+  DebugMode: 1

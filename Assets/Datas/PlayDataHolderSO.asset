@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a01e98d126c6c449d64908ee45acd2, type: 3}
   m_Name: PlayDataHolderSO
   m_EditorClassIdentifier: 
-  playerHealth: 100
+  playerHealth: 0
   Score: 0
   maxCombo: 0

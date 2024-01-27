@@ -234,7 +234,7 @@ public class PlayerInputBuffer
             {
                 ic.types[1] = InputType.MoveR;
             }
-            else if (p1.types[0] == InputType.MoveR)
+            else if (p1.types[1] == InputType.MoveR)
             {
                 ic.types[1] = InputType.MoveL;
             }

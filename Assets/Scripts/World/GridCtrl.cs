@@ -5,6 +5,10 @@ using UnityEngine;
 public class GridCtrl : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
+
+    [SerializeField] Sprite Normal;
+    [SerializeField] Sprite Danger;
+
     public int damage { get; private set; }
     public Vector2 LandingOffset;
 
@@ -24,7 +28,10 @@ public class GridCtrl : MonoBehaviour
     public void SetDanger(int damage)
     {
         this.damage = damage;
-        spriteRenderer.color = damage <= 0 ? Color.white : Color.red;
+
+        //spriteRenderer.color = damage <= 0 ? Color.white : Color.red;
+
+        spriteRenderer.sprite = damage <= 0 ? Normal : Danger;
     }
 
     public void SetPosition(Vector2 vec2)

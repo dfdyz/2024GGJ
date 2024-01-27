@@ -67,24 +67,24 @@ public class SkillActionSheetSO : ScriptableObject
 
 
 
-        public PlayerInputBuffer.InputClip inputClip; 
+        public PlayerInputBuffer.InputClip inputClip;
         /*
             对于玩家：
-                所有合法按键操作
+                types数组长度必须为2, count可以是 0 1 2 3，设置包含合法按键操作
+                count 0:原地不动  1:一个按键  2:两个按键  3:缺省
             对于怪物：
-                Move确定移动方向
-                Accept就是原地不动
+                types数组里面必须有东西，仅读取第下标0
+                Move   移动方向，attack朝向
+                Accept 原地不动
          */
 
 
         public string audio;     // 特殊音效，留空则为默认
-
-        public string effect;
+        public string effect;    // 特殊特效，留空则为默认
 
         public SkillPhase GetNeg()
         {
             SkillPhase sp = new SkillPhase();
-
 
             sp.type = type;
             sp.phaseData = new int[phaseData.Length];

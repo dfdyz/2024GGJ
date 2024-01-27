@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
   playerkillRegistries:
-  - name: test11
+  - name: P1
     phases:
     - type: 1
       phaseData: 
@@ -28,8 +28,8 @@ MonoBehaviour:
         types: 0000000002000000
         count: 2
       audio: 
-      effect: 
-  - name: test21
+      effect: t1
+  - name: P2
     phases:
     - type: 1
       phaseData: 
@@ -66,7 +66,7 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
-  - name: test31
+  - name: P3
     phases:
     - type: 1
       phaseData: 
@@ -96,7 +96,7 @@ MonoBehaviour:
         count: 1
       audio: 
       effect: 
-  - name: test41
+  - name: P4
     phases:
     - type: 1
       phaseData: 
@@ -140,16 +140,23 @@ MonoBehaviour:
         count: 0
       audio: 
       effect: 
-    - type: 1
-      phaseData: 
+    - type: 3
+      phaseData: 05000000e8030000
       inputClip:
         types: 0100000002000000
         count: 2
       audio: 
-      effect: 
+      effect: t4
   mobSkillRegistries:
   - name: boss1
     phases:
+    - type: 1
+      phaseData: 
+      inputClip:
+        types: 02000000
+        count: 0
+      audio: 
+      effect: 
     - type: 1
       phaseData: 
       inputClip:
@@ -157,22 +164,15 @@ MonoBehaviour:
         count: 0
       audio: 
       effect: 
-    - type: 1
-      phaseData: 
+    - type: 3
+      phaseData: 010000003200000000000000
       inputClip:
-        types: 02000000
+        types: 00000000
         count: 0
       audio: 
       effect: 
     - type: 1
       phaseData: 
-      inputClip:
-        types: 02000000
-        count: 0
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 0300000032000000
       inputClip:
         types: 02000000
         count: 0

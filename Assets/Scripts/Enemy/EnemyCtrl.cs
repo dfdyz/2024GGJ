@@ -9,6 +9,7 @@ public class EnemyCtrl : MonoBehaviour
 
     [Header("Resources")]
 
+
     [Header("Parameters")]
     [SerializeField] float moveSmooth = 0.25f;
     [Header("Display")]
@@ -44,6 +45,10 @@ public class EnemyCtrl : MonoBehaviour
         GameManager.Instance.onJudgmentEndTick += delayJudgment;
 
         GridManager.Instance.enemyCtrl = this;
+
+
+        gameObject.transform.position = GridManager.Instance.GetEnemyVisualPos();
+        CameraFallow.ResetCamera();
     }
 
 
@@ -92,8 +97,8 @@ public class EnemyCtrl : MonoBehaviour
 
                         break;
                     case SkillActionSheetSO.PhaseType.Attack:
-                        if(faceDir > 0) { // right
-                            if(playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
+                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0) { // right
+                            if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                             {
                                 GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                                 attackSucess = true;
@@ -114,7 +119,7 @@ public class EnemyCtrl : MonoBehaviour
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
                         // attack and move
-                        if (faceDir > 0)
+                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
                         { // right
                             if (playerPos >= selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                             {
@@ -155,26 +160,28 @@ public class EnemyCtrl : MonoBehaviour
             {
                 switch (cPhase.type)
                 {
+                    // no movement
                     case SkillActionSheetSO.PhaseType.Attack:
-                        if (faceDir > 0)
+                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
                         { // right
-                            if (playerPos > selfPos - cPhase.phaseData[0] && playerPos <= selfPos)
+                            if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                             {
                                 GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                             }
                         }
                         else // left
                         {
-                            if (playerPos < selfPos + cPhase.phaseData[0] && playerPos >= selfPos)
+                            if (playerPos < selfPos && playerPos >= selfPos - cPhase.phaseData[0])
                             {
                                 GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                             }
                         }
 
+
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
                         // attack and move
-                        if (faceDir > 0)
+                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
                         { // right
                             if (playerPos >= selfPos - cPhase.phaseData[0] && playerPos <= selfPos)
                             {
@@ -204,7 +211,6 @@ public class EnemyCtrl : MonoBehaviour
         {
             int predict = 0;
             SkillActionSheetSO.SkillPhase cPhase = currentSkill.phases[currPhase + 1];
-
             switch (cPhase.type)
             {
                 case SkillActionSheetSO.PhaseType.Normal:

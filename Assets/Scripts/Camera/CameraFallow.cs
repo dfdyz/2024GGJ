@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class CameraFallow : MonoBehaviour
 {
+    private static CameraFallow instance;
     [Header("Resources")]
 
     [Header("Parameters")]
     [SerializeField] float smooth = 0.2f;
     [SerializeField] GameObject A;
     [SerializeField] GameObject B;
+    [SerializeField] Vector3 Offset = new Vector3 (0, 3, 0);
 
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -31,9 +38,16 @@ public class CameraFallow : MonoBehaviour
 
     void UpdateCamera()
     {
-        Vector3 posFocusOn = (A.transform.position + B.transform.position) / 2;
+        Vector3 posFocusOn = (A.transform.position + B.transform.position) / 2 + Offset;
         posFocusOn = Vector3.Lerp(gameObject.transform.position, posFocusOn, smooth);
         posFocusOn.z = gameObject.transform.position.z;
         gameObject.transform.position = posFocusOn;
+    }
+
+    public static void ResetCamera()
+    {
+        Vector3 posFocusOn = (instance.A.transform.position + instance.B.transform.position) / 2 + instance.Offset;
+        posFocusOn.z = instance.gameObject.transform.position.z;
+        instance.gameObject.transform.position = posFocusOn;
     }
 }

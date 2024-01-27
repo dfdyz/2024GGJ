@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     [SerializeField] GameObject suspendPanel;
+    [SerializeField] BeaterCtrl beater;
 
     private void Awake()
     {
@@ -39,6 +40,16 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.Suspend();
         suspendPanel.SetActive(true);
+    }
+
+    public void ShowDangerEffect(bool enable)
+    {
+        // todo
+    }
+
+    public void SetBeaterPos(int pos)
+    {
+        beater.SetPointer(pos);
     }
 
     public void Resume() {

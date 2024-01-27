@@ -16,6 +16,9 @@ public class GridManager : MonoBehaviour
     [SerializeField] Vector2 offsetPerGrid;
     public int radius = 8;
     public int dangerAreaSize = 5;
+    [SerializeField] int[] dangerDamage = new int[]{ 
+        25, 50, 100, 100, 100, 100
+    };
 
     private GridCtrl[] grids;
 
@@ -30,7 +33,8 @@ public class GridManager : MonoBehaviour
         Instance = this;
         int gridCounts = radius * 2 + dangerAreaSize * 2 + 1;
         grids = new GridCtrl[gridCounts];
-
+        InitGrids();
+        InitBattlePos();
     }
 
     GridCtrl InstantiateGrid()
@@ -49,7 +53,10 @@ public class GridManager : MonoBehaviour
         }
     }
 
-
+    public Vector2 GetViaualPosAt(int pos)
+    {
+        return grids[GetRealPos(pos, 0)].GetLandingPos();
+    }
     public int GetRealPos(int coord, int offset)
     {
         return (((coord + offset) % grids.Length) + grids.Length) % grids.Length;
@@ -57,7 +64,12 @@ public class GridManager : MonoBehaviour
 
     public Vector2 GetPlayerVisualPos()
     {
-        return grids[GetRealPos(playerAt, 0)].GetLandingPos();
+        return GetPlayerCurrentGrid().GetLandingPos();
+    }
+
+    public GridCtrl GetPlayerCurrentGrid()
+    {
+        return grids[GetRealPos(playerAt, 0)];
     }
 
     public Vector2 GetEnemyVisualPos()
@@ -70,6 +82,9 @@ public class GridManager : MonoBehaviour
         enemyAt = radius + dangerAreaSize + 1;
         playerAt = enemyAt - 5;
     }
+
+
+    
 
     public void SetupGrid()
     {
@@ -93,11 +108,11 @@ public class GridManager : MonoBehaviour
         {
             dir = radius + i + 1;
             idx = GetRealPos(enemyAt, dir);
-            grids[idx].SetDanger(10);
+            grids[idx].SetDanger(dangerDamage[i]);
             grids[idx].SetPosition(enemyPos + offsetPerGrid * dir);
 
             idx = GetRealPos(enemyAt, -dir);
-            grids[idx].SetDanger(10);
+            grids[idx].SetDanger(dangerDamage[i]);
             grids[idx].SetPosition(enemyPos - offsetPerGrid * dir);
         }
     }
@@ -110,15 +125,11 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InitGrids();
     }
 
     // Update is called once per frame
     void Update()
     {
         SetupGrid();
-
-
-
     }
 }

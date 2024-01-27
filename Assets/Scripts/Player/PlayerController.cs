@@ -10,6 +10,7 @@ using static UnityEditor.ShaderData;
 public class PlayerController : MonoBehaviour
 {
     [Header("Resources")]
+    
 
     [Header("Parameters")]
     [SerializeField] int MaxHealth = 100;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private bool skillHandled = false;
 
     private PlayerInputBuffer inputCache = new PlayerInputBuffer(8);
+
 
     public int Health
     {
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
         DebugManager.Instance.debugWindowAttachmentFunc += DebugInfo;
 
-
+        CameraFallow.ResetCamera();
     }
 
     void DebugInfo()
@@ -67,6 +69,12 @@ public class PlayerController : MonoBehaviour
     public void ResetPlayer()
     {
         Health = MaxHealth;
+    }
+
+
+    public void ShootEffect()
+    {
+
     }
 
 
@@ -105,8 +113,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
-        
     }
 
     [SerializeField]
@@ -129,6 +135,8 @@ public class PlayerController : MonoBehaviour
         slot = (judgmentBeat - 1) % 4 + (attachMatch ? 4:0);
 
         GameManager.Instance.gameData.Combo(++combo);
+        GameManager.Instance.HurtPlayer(-2);
+        GameManager.Instance.gameData.playerHealth = Mathf.Clamp(GameManager.Instance.gameData.playerHealth, 0, MaxHealth);
 
         bool attach = slot == 0 && judgmentBeat > GameManager.Instance.currentBeat && matchedSkill.Count > 0;
         slot += attach && slot < 4 ? 4 : 0;
@@ -261,6 +269,10 @@ public class PlayerController : MonoBehaviour
         switch(phase.type)
         {
             case PhaseType.Attack:
+                if (phase.effect != "")
+                {
+                    EffectManager.GetEffectInctanceByName(phase.effect).ShowEffect(selfPos, faceDir);
+                }
                 if (faceDir > 0)
                 { // right
                     if (enemyPos >= selfPos && enemyPos <= selfPos + phase.phaseData[0])
@@ -291,6 +303,11 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case PhaseType.AttachMovementWithAttack:
+                if (phase.effect != "")
+                {
+                    EffectManager.GetEffectInctanceByName(phase.effect).ShowEffect(selfPos, faceDir);
+                }
+
                 selfPos += faceDir * phase.phaseData[0];
 
                 if (faceDir > 0)
@@ -322,7 +339,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        if(phase.effect != "") print(phase.effect);
+        
     }
 
 
@@ -343,6 +360,19 @@ public class PlayerController : MonoBehaviour
             ResetMatch();
             ReMatchSkill();
         }
+
+        if (GameManager.Instance.isStarted)
+        {
+            GridCtrl gc = GridManager.Instance.GetPlayerCurrentGrid();
+
+            UIManager.Instance.ShowDangerEffect(gc.damage > 0);
+
+            if (gc.damage > 0)
+            {
+                GameManager.Instance.HurtPlayer(gc.damage);
+            }
+        }
+
     }
 
     #region Folder1
@@ -491,7 +521,7 @@ public class PlayerController : MonoBehaviour
 
     void onBeat()
     {
-
+        
     }
 
     #endregion

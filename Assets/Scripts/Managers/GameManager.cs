@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using static SkillActionSheetSO;
 
 
@@ -74,6 +75,9 @@ public class GameManager : MonoBehaviour
             timeline.s_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
             timeline.s_JudgmentInterval_additional = ms_JudgmentInterval_add / 1000.0;
             timeline.Start(bpm);
+
+            UIManager.Instance.SetBeaterPos(0);
+
             GridManager.Instance.InitBattlePos();
             onGameStart();
         }
@@ -95,12 +99,24 @@ public class GameManager : MonoBehaviour
             if(currentBeat >= 4)
             {
                 realStarted = true;
-                currentBeat = 0;
+                currentBeat -= 4;
                 lastSucessBeat = 0;
             }
         }
     }
 
+
+    void SettlementGame()
+    {
+        BattleEnd();
+        StartCoroutine(SettlementGame_());
+    }
+
+    IEnumerator SettlementGame_()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+    }
 
     public int GetModifiedCurrBeat()
     {
@@ -110,6 +126,11 @@ public class GameManager : MonoBehaviour
     public void HurtPlayer(int dmg)
     {
         gameData.playerHealth -= dmg;
+
+        if(gameData.playerHealth <= 0)
+        {
+            SettlementGame();
+        }
     }
 
     public void BattleEnd()
@@ -144,7 +165,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        
         timeline.onBaseBeat = onBaseBeat;
         timeline.onLogicBaseBeat = onLogicBaseBeat;
         timeline.onJudgmentEndTick = JudgmentEnd;
@@ -152,7 +173,7 @@ public class GameManager : MonoBehaviour
         playerSkillRegistries = skillActionSheet.BakePlayerSkill();
         mobSkillRegistries = skillActionSheet.mobSkillRegistries;
 
-        GridManager.Instance.InitBattlePos();
+        //GridManager.Instance.InitBattlePos();
 
         if (!DebugManager.Instance.debugMode) {
             StartCoroutine(PlayModeStart());
@@ -173,16 +194,26 @@ public class GameManager : MonoBehaviour
     void onBaseBeat()
     {
         ++currentAudioBeat;
+
+        if (currentAudioBeat - 4 > settingData.subsectionCount * 4) return;
+
         //onBeat();
-        if((currentAudioBeat - 1) % 4 == 0)
+        if(currentAudioBeat <= 4)
         {
-            AudioManager.Instance.PlayAudio("heavybeat");
-            //onHeavyBeat();
+            AudioManager.Instance.PlayAudio("prevbeat");
         }
         else
         {
-            AudioManager.Instance.PlayAudio("beat");
-            //onNormalBeat();
+            if ((currentAudioBeat - 1) % 4 == 0)
+            {
+                AudioManager.Instance.PlayAudio("heavybeat");
+                //onHeavyBeat();
+            }
+            else
+            {
+                AudioManager.Instance.PlayAudio("beat");
+                //onNormalBeat();
+            }
         }
     }
 
@@ -193,6 +224,11 @@ public class GameManager : MonoBehaviour
         ++currentBeat;
         if (realStarted)
         {
+            if (currentBeat > settingData.subsectionCount * 4)
+            {
+                SettlementGame();
+            }
+
             if ((currentBeat - 1) % 4 == 0)
             {
                 //AudioManager.Instance.PlayAudio("heavybeat");
@@ -204,17 +240,23 @@ public class GameManager : MonoBehaviour
                 onNormalBeat();
             }
             onBeat();
+
+           
+
         }
         else
         {
+            
             if(currentBeat >= 5)
             {
                 realStarted = true;
-                currentBeat = 1;
+                currentBeat -= 4;
                 lastSucessBeat = 0;
             }
         }
-        
+
+        UIManager.Instance.SetBeaterPos((currentBeat - 1) % 4);
+
     }
 
 
