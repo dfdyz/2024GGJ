@@ -13,27 +13,7 @@ MonoBehaviour:
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
   playerkillRegistries:
-<<<<<<< HEAD
-  - name: P1
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 3
-      phaseData: 010000006400000001000000
-      inputClip:
-        types: 0000000002000000
-        count: 2
-      audio: 
-      effect: 
-  - name: P2
-=======
   - name: test11
->>>>>>> main
     phases:
     - type: 1
       phaseData: 
@@ -82,8 +62,6 @@ MonoBehaviour:
     - type: 1
       phaseData: 
       inputClip:
-<<<<<<< HEAD
-=======
         types: 0000000000000000
         count: 2
       audio: 
@@ -130,7 +108,6 @@ MonoBehaviour:
     - type: 1
       phaseData: 
       inputClip:
->>>>>>> main
         types: 0100000001000000
         count: 1
       audio: 
@@ -145,104 +122,6 @@ MonoBehaviour:
     - type: 1
       phaseData: 
       inputClip:
-<<<<<<< HEAD
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 2
-      phaseData: 030000009600000000000000
-      inputClip:
-        types: 0000000000000000
-        count: 2
-      audio: 
-      effect: 
-  - name: P3
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 0
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 3
-<<<<<<< Updated upstream
-      phaseData: 020000009600000001000000
-=======
-      phaseData: 02000000960000000a000000
->>>>>>> Stashed changes
-      inputClip:
-        types: 0200000002000000
-        count: 1
-      audio: 
-      effect: 
-  - name: P4
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 0
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 0
-      audio: 
-      effect: 
-    - type: 3
-      phaseData: 05000000c800000000000000
-      inputClip:
-        types: 0100000002000000
-        count: 2
-      audio: 
-      effect: 
-=======
         types: 0100000001000000
         count: 1
       audio: 
@@ -268,7 +147,6 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
->>>>>>> main
   mobSkillRegistries:
   - name: boss1
     phases:
