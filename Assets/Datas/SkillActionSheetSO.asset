@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SkillActionSheetSO
   m_EditorClassIdentifier: 
   playerkillRegistries:
-  - name: test11
+  - name: test1
     phases:
     - type: 1
       phaseData: 
@@ -29,23 +29,7 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
-  - name: test12
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000002000000
-        count: 2
-      audio: 
-      effect: 
-  - name: test21
+  - name: test2
     phases:
     - type: 1
       phaseData: 
@@ -82,44 +66,7 @@ MonoBehaviour:
         count: 2
       audio: 
       effect: 
-  - name: test22
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0100000001000000
-        count: 2
-      audio: 
-      effect: 
-  - name: test31
+  - name: test3
     phases:
     - type: 1
       phaseData: 
@@ -149,37 +96,7 @@ MonoBehaviour:
         count: 1
       audio: 
       effect: 
-  - name: test32
-    phases:
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 0
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0000000000000000
-        count: 1
-      audio: 
-      effect: 
-    - type: 1
-      phaseData: 
-      inputClip:
-        types: 0200000002000000
-        count: 1
-      audio: 
-      effect: 
-  - name: test41
+  - name: test4
     phases:
     - type: 1
       phaseData: 
