@@ -23,7 +23,7 @@ MonoBehaviour:
       audio: 
       effect: 
     - type: 3
-      phaseData: 030000006400000001000000
+      phaseData: 010000006400000001000000
       inputClip:
         types: 0000000002000000
         count: 2
@@ -90,7 +90,11 @@ MonoBehaviour:
       audio: 
       effect: 
     - type: 3
+<<<<<<< Updated upstream
       phaseData: 020000009600000001000000
+=======
+      phaseData: 02000000960000000a000000
+>>>>>>> Stashed changes
       inputClip:
         types: 0200000002000000
         count: 1
