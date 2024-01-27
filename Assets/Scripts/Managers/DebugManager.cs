@@ -41,10 +41,11 @@ public class DebugManager : MonoBehaviour
             GameManager.Instance.BattleEnd();
         }
 
+        /*
         if (GUILayout.Button("AudioOffset"))
         {
             SettingsManager.Instance.StartAdjustAudioOffset();
-        }
+        }*/
 
         GUILayout.Label(string.Format("{0}", (int)(GameManager.Instance.audioOffset * 1000)));
 

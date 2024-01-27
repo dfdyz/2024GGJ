@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                print("Miss");
+                if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.J))
+                {
+                    print("Miss");
+                }
             }
         }
 

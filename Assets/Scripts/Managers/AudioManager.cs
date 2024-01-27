@@ -12,6 +12,8 @@ public class AudioManager : MonoBehaviour
     private AudioRegistriesSO registries;
     [SerializeField]
     private GameObject audioSourceHolder;
+    [SerializeField]
+    private int audioSourceCount = 16;
 
     private AudioSourceManager audioSourceManager;
 
@@ -21,7 +23,7 @@ public class AudioManager : MonoBehaviour
 
         registries.Init();
 
-        audioSourceManager = new AudioSourceManager(audioSourceHolder, 16);
+        audioSourceManager = new AudioSourceManager(audioSourceHolder, audioSourceCount);
         audioSourceManager.Init();
     }
     // Start is called before the first frame update

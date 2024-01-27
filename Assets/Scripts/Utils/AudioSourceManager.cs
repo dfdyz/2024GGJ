@@ -17,8 +17,6 @@ public class AudioSourceManager
         audioSourceCount = Count;
     }
 
-
-
     public void Init()
     {
         audioSources = new AudioSource[audioSourceCount];

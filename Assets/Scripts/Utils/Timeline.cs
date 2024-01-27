@@ -15,6 +15,7 @@ public class TimelineManager
     double timePerBeat = 0;
 
     public delegate void BeatEvent();
+    public delegate double DoubleProvider();
 
     public BeatEvent onBaseBeat = () => {}; //ÉùÒôÖá
 
@@ -25,11 +26,14 @@ public class TimelineManager
     public double s_JudgmentInterval_neg = 0;
     public double s_JudgmentInterval_additional = 0;
 
-    public double judgmentOffset { 
-        get => SettingsManager.Instance.settingData.audioOffset; 
-        set => SettingsManager.Instance.settingData.audioOffset = value; 
+    public double judgmentOffset {
+        get => audioOffsetGetter();
     }
-    public TimelineManager() {
+
+    private DoubleProvider audioOffsetGetter;
+
+    public TimelineManager(DoubleProvider audioOffsetGetter) {
+        this.audioOffsetGetter = audioOffsetGetter;
     }
 
     

@@ -22,15 +22,14 @@ public class SettingsManager : MonoBehaviour
     void Update()
     {
         AdjustAudioOffset();
-
     }
 
-    bool beginAdjOff = false;
+    public bool beginAdjOff = false;
     int AdjOff_beat = 0;
     bool AdjOff_enable_beat = false;
     double AdjOff_mark_time = 0;
     double AdjOff_marked_time = 0;
-    double[] AdjOff_sample = { 1,1,1,1 };
+    public double[] AdjOff_sample = { 0,0,0,0 };
 
     void AdjustAudioOffset()
     {
@@ -41,9 +40,22 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
+
+    Coroutine adjCor = null;
     public void StartAdjustAudioOffset()
     {
+        if (beginAdjOff) return;
+        StopAdjust();
         StartCoroutine(IAdjustAudioOffset());
+    }
+
+    public void StopAdjust()
+    {
+        if (adjCor != null)
+        {
+            StopCoroutine(adjCor);
+            adjCor = null;
+        }
     }
 
     IEnumerator IAdjustAudioOffset()
@@ -51,9 +63,15 @@ public class SettingsManager : MonoBehaviour
         AdjOff_beat = 0;
         beginAdjOff = true;
         AdjOff_enable_beat = false;
+        for (int i = 0; i < AdjOff_sample.Length; ++i)
+        {
+            AdjOff_sample[i] = 0;
+        }
         yield return new WaitForSeconds(1f);
 
-        for (int i = 0; i < AdjOff_sample.Length; i++)
+
+
+        for (int i = 0; i < AdjOff_sample.Length; ++i)
         {
             ++AdjOff_beat;
             AudioManager.Instance.PlayAudio("beat");
@@ -80,7 +98,12 @@ public class SettingsManager : MonoBehaviour
 
         ao /= AdjOff_sample.Length;
 
-        GameManager.Instance.audioOffset = ao;
+        settingData.audioOffset = ao;
+
+        yield return new WaitForSeconds(1f);
+        beginAdjOff = false;
+
+        adjCor = null;
     }
 
 

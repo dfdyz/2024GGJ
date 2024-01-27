@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 137796652}
   - component: {fileID: 137796651}
   - component: {fileID: 137796654}
-  - component: {fileID: 137796655}
   - component: {fileID: 137796656}
   m_Layer: 0
   m_Name: Managers
@@ -157,12 +156,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillActionSheet: {fileID: 11400000, guid: c974db170584f5c46a1e48e7f07a2bc8, type: 2}
+  settingData: {fileID: 11400000, guid: 0d56e41b511df7e4996efcf9086d91f9, type: 2}
   playerkillRegistries: []
   mobSkillRegistries: []
   bpm: 120
-  ms_JudgmentInterval_pos: 100
-  ms_JudgmentInterval_neg: 80
-  ms_JudgmentInterval_add: 80
+  ms_JudgmentInterval_pos: 110
+  ms_JudgmentInterval_neg: 100
+  ms_JudgmentInterval_add: 90
   lastSucessBeat: 0
 --- !u!114 &137796652
 MonoBehaviour:
@@ -178,6 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   registries: {fileID: 11400000, guid: 38a700ce35332d44e87cce40496c8c50, type: 2}
   audioSourceHolder: {fileID: 360360839}
+  audioSourceCount: 16
 --- !u!4 &137796653
 Transform:
   m_ObjectHideFlags: 0
@@ -205,19 +206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac74c29286d9344eba78db0085276f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &137796655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137796650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a9b43742e568694ebce155569cde3ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settingData: {fileID: 11400000, guid: 0d56e41b511df7e4996efcf9086d91f9, type: 2}
 --- !u!114 &137796656
 MonoBehaviour:
   m_ObjectHideFlags: 0

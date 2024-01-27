@@ -13,10 +13,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        timeline = new TimelineManager(() => audioOffset);
     }
 
     [Header("Resources")]
     public SkillActionSheetSO skillActionSheet;
+    public SettingHolderSO settingData;
 
     public SkillClip[] playerkillRegistries;
     public SkillClip[] mobSkillRegistries;
@@ -41,12 +43,12 @@ public class GameManager : MonoBehaviour
 
     public double audioOffset
     {
-        get => timeline.judgmentOffset;
-        set => timeline.judgmentOffset = value;
+        get => settingData.audioOffset;
+        set => settingData.audioOffset = value;
     }
 
     public bool isStarted { get; private set; }
-    public TimelineManager timeline {  get; private set; } = new TimelineManager();
+    public TimelineManager timeline {  get; private set; }
 
     public void BattleStart()
     {
