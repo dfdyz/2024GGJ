@@ -54,8 +54,8 @@ public class EnemyCtrl : MonoBehaviour
 
     public void NextSkill()
     {
-        int skill = Random.Range(0, GameManager.Instance.skillActionSheets.mobSkillRegistries.Length);
-        currentSkill = GameManager.Instance.skillActionSheets.mobSkillRegistries[skill];
+        int skill = Random.Range(0, GameManager.Instance.mobSkillRegistries.Length);
+        currentSkill = GameManager.Instance.mobSkillRegistries[skill];
 
         faceDir = Random.Range(0, 2) == 0 ? 1 : -1;
         currPhase = 0;

@@ -149,6 +149,37 @@ public class PlayerInputBuffer
             return !(p1 == p2);
         }
 
+        public static InputClip operator -(InputClip p1)
+        {
+            InputClip ic = new InputClip();
+            ic.count = p1.count;
+            ic.types = new InputType[2];
+
+            if (p1.types[0] == InputType.MoveL)
+            {
+                ic.types[0] = InputType.MoveR;
+            }
+            else if (p1.types[0] == InputType.MoveR)
+            {
+                ic.types[0] = InputType.MoveL;
+            }
+            else ic.types[0] = p1.types[0];
+
+
+
+            if (p1.types[1] == InputType.MoveL)
+            {
+                ic.types[1] = InputType.MoveR;
+            }
+            else if (p1.types[0] == InputType.MoveR)
+            {
+                ic.types[1] = InputType.MoveL;
+            }
+            else ic.types[1] = p1.types[1];
+
+            return ic;
+        }
+
 
     }
 

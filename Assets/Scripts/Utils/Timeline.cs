@@ -21,10 +21,14 @@ public class TimelineManager
     public BeatEvent onLogicBaseBeat = () => { };  //逻辑轴
     public BeatEvent onJudgmentEndTick = () => { };  //某拍判定结束的事件
 
-    public double ms_JudgmentInterval_pos = 0;
-    public double ms_JudgmentInterval_neg = 0;
+    public double s_JudgmentInterval_pos = 0;
+    public double s_JudgmentInterval_neg = 0;
+    public double s_JudgmentInterval_additional = 0;
 
-    public double judgmentOffset = 0;
+    public double judgmentOffset { 
+        get => SettingsManager.Instance.settingData.audioOffset; 
+        set => SettingsManager.Instance.settingData.audioOffset = value; 
+    }
     public TimelineManager() {
     }
 
@@ -37,8 +41,9 @@ public class TimelineManager
     {
 
         //base beat(audio)
+        double thisTick = Time.realtimeSinceStartupAsDouble;
         nextBeat = GetNextBaseBeatTick();
-        if (Time.realtimeSinceStartupAsDouble >= nextBeat)
+        if (thisTick >= nextBeat)
         {
             lastBeatTick = nextBeat;
             onBaseBeat();
@@ -46,7 +51,7 @@ public class TimelineManager
 
         // logic beat
         nextLogicBeat = GetNextLogicBaseBeatTick();
-        if (Time.realtimeSinceStartupAsDouble >= nextLogicBeat)
+        if (thisTick >= nextLogicBeat)
         {
             lastLogicBeatTick = nextLogicBeat;
             onLogicBaseBeat();
@@ -54,11 +59,12 @@ public class TimelineManager
 
         // judgment end
         nextJudgmentEnd = GetNextJudgmentBeatTick();
-        if (Time.realtimeSinceStartupAsDouble >= nextJudgmentEnd)
+        if (thisTick >= nextJudgmentEnd)
         {
-            lastLogicBeatTick = nextJudgmentEnd;
+            lastJudgmentBeatTick = nextJudgmentEnd;
             onJudgmentEndTick();
         }
+
 
         //UnityEngine.Debug.Log("next beat: " + nextBeat);
         //UnityEngine.Debug.Log("time: " + Time.realtimeSinceStartupAsDouble);
@@ -66,12 +72,19 @@ public class TimelineManager
 
     public bool JudgementNextBeat()
     {
-        return Time.realtimeSinceStartupAsDouble >= GetNextLogicBaseBeatTick() - ms_JudgmentInterval_neg;
+        return Time.realtimeSinceStartupAsDouble >= GetNextLogicBaseBeatTick() - s_JudgmentInterval_neg;
     }
 
     public bool JudementThisBeat()
     {
-        return Time.realtimeSinceStartupAsDouble <= lastLogicBeatTick + ms_JudgmentInterval_pos;
+        return 
+            Time.realtimeSinceStartupAsDouble <= lastLogicBeatTick + s_JudgmentInterval_pos;
+    }
+
+    public bool JudgmentThisBeatAdditional()
+    {
+        return
+            Time.realtimeSinceStartupAsDouble <= lastLogicBeatTick + s_JudgmentInterval_pos + s_JudgmentInterval_additional;
     }
 
     public void Start(int bpm)
@@ -86,7 +99,7 @@ public class TimelineManager
         startedTick = Time.realtimeSinceStartupAsDouble;
         lastBeatTick = startedTick;
         lastLogicBeatTick = lastBeatTick + judgmentOffset;
-        lastJudgmentBeatTick = lastLogicBeatTick + ms_JudgmentInterval_pos;
+        lastJudgmentBeatTick = lastLogicBeatTick + s_JudgmentInterval_pos;
     }
 
     public double GetNextBaseBeatTick()

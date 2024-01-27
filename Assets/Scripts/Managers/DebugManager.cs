@@ -46,7 +46,7 @@ public class DebugManager : MonoBehaviour
             SettingsManager.Instance.StartAdjustAudioOffset();
         }
 
-        GUILayout.Label(string.Format("{0:F3}", GameManager.Instance.audioOffset));
+        GUILayout.Label(string.Format("{0}", (int)(GameManager.Instance.audioOffset * 1000)));
 
 
         debugWindowAttachmentFunc();

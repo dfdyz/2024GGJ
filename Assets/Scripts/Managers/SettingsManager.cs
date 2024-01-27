@@ -5,6 +5,9 @@ using UnityEngine;
 public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance { get; private set; }
+
+    public SettingHolderSO settingData;
+
     private void Awake()
     {
         Instance = this;

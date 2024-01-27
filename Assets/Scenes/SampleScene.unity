@@ -156,10 +156,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa901ef60026c3649bc2d8fae8ce82ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillActionSheets: {fileID: 11400000, guid: c974db170584f5c46a1e48e7f07a2bc8, type: 2}
+  skillActionSheet: {fileID: 11400000, guid: c974db170584f5c46a1e48e7f07a2bc8, type: 2}
+  playerkillRegistries: []
+  mobSkillRegistries: []
   bpm: 120
-  ms_JudgmentInterval_pos: 120
+  ms_JudgmentInterval_pos: 100
   ms_JudgmentInterval_neg: 80
+  ms_JudgmentInterval_add: 80
   lastSucessBeat: 0
 --- !u!114 &137796652
 MonoBehaviour:
@@ -214,6 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a9b43742e568694ebce155569cde3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingData: {fileID: 11400000, guid: 0d56e41b511df7e4996efcf9086d91f9, type: 2}
 --- !u!114 &137796656
 MonoBehaviour:
   m_ObjectHideFlags: 0

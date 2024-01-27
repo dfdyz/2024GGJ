@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using static SkillActionSheetSO;
 
 
 public class GameManager : MonoBehaviour
@@ -15,16 +16,17 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("Resources")]
-    public SkillActionSheetSO skillActionSheets;
+    public SkillActionSheetSO skillActionSheet;
 
-
+    public SkillClip[] playerkillRegistries;
+    public SkillClip[] mobSkillRegistries;
 
     [Header("Parameters")]
     public int bpm = 120;
 
     public int ms_JudgmentInterval_pos = 80; // 正向
     public int ms_JudgmentInterval_neg = 80; // 反向
-
+    public int ms_JudgmentInterval_add = 70; // 双click补偿
 
     [Header("Display")]
     public int lastSucessBeat = 0;
@@ -55,8 +57,9 @@ public class GameManager : MonoBehaviour
             currentAudioBeat = 0;
             lastSucessBeat = 0;
 
-            timeline.ms_JudgmentInterval_pos = ms_JudgmentInterval_pos / 1000.0;
-            timeline.ms_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
+            timeline.s_JudgmentInterval_pos = ms_JudgmentInterval_pos / 1000.0;
+            timeline.s_JudgmentInterval_neg = ms_JudgmentInterval_neg / 1000.0;
+            timeline.s_JudgmentInterval_additional = ms_JudgmentInterval_add / 1000.0;
             timeline.Start(bpm);
         }
         else
@@ -93,7 +96,9 @@ public class GameManager : MonoBehaviour
     {
         timeline.onBaseBeat = onBaseBeat;
         timeline.onLogicBaseBeat = onLogicBaseBeat;
-        audioOffset = 0.18;
+
+        playerkillRegistries = skillActionSheet.BakePlayerSkill();
+        mobSkillRegistries = skillActionSheet.mobSkillRegistries;
     }
 
 
@@ -101,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     void onBaseBeat()
     {
+
         ++currentAudioBeat;
         onBeat();
         if((currentAudioBeat - 1) % 4 == 0)
@@ -117,6 +123,7 @@ public class GameManager : MonoBehaviour
 
     void onLogicBaseBeat()
     {
+        print("bb");
         ++currentBeat;
         onBeat();
         if ((currentBeat - 1) % 4 == 0)
@@ -133,6 +140,10 @@ public class GameManager : MonoBehaviour
 
     public int Judgment()
     {
+        if (GetModifiedCurrBeat() >= currentBeat && timeline.JudgmentThisBeatAdditional())
+        {
+            return currentBeat;
+        }
         if (timeline.JudementThisBeat())
         {
             return currentBeat;
@@ -144,13 +155,6 @@ public class GameManager : MonoBehaviour
 
         return -1;
     }
-
-
-    
-   
-   
- 
-
 
     // Update is called once per frame
     void Update()

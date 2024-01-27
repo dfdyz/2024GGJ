@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     [Header("Display")]
     public HashSet<int> matchedSkill = new HashSet<int>();
     public int Health;
-
     private PlayerInputBuffer inputCache = new PlayerInputBuffer(8);
 
 
@@ -89,7 +88,7 @@ public class PlayerController : MonoBehaviour
     void MatchAllSkill()
     {
         matchedSkill.Clear();
-        for (int i = 0; i < GameManager.Instance.skillActionSheets.playerkillRegistries.Length; i++)
+        for (int i = 0; i < GameManager.Instance.playerkillRegistries.Length; i++)
         {
             matchedSkill.Add(i);
         }
@@ -152,16 +151,38 @@ public class PlayerController : MonoBehaviour
 
     void onJudgmentEnd()
     {
-        MatchSkill();
+        MatchSkill(true);
     }
 
-    void MatchSkill()
+    void MatchSkill(bool isEndJudgment = false)
     {
-        SkillClip[] playerkillRegistries = GameManager.Instance.skillActionSheets.playerkillRegistries;
+        SkillClip[] playerkillRegistries = GameManager.Instance.playerkillRegistries;
 
         matchedSkill.RemoveWhere((id) =>
         {
             SkillPhase[] phases = playerkillRegistries[id].phases;
+
+
+            if (isEndJudgment)
+            {
+                if (phases.Length < slot + 1) return true;
+                else
+                {
+                    if (phases[slot].inputClip.count <= 2) // ·ÇÈ±Ê¡
+                    {
+                        if (phases[slot].inputClip != inputCache.bufferedInput[slot])
+                        {
+                            return true;
+                        }
+                        
+                    }
+                }
+
+
+
+                return false;
+            }
+
 
             if (phases.Length < slot + 1) return true;
             else //if (phases.Length == slot+1)
@@ -218,10 +239,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    
-    
-
-
     void HandleJudgmentSecond()
     {
         slot = (judgmentBeat - 1) % 4;
@@ -257,12 +274,6 @@ public class PlayerController : MonoBehaviour
             MatchAndHandleSkill();
         }
     }
-
-
-
-
-
-
 
     void onBeat()
     {
