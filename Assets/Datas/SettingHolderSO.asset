@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eed52809e1fe74a8fe8543e1d0bcac, type: 3}
   m_Name: SettingHolderSO
   m_EditorClassIdentifier: 
-  audioOffset: 0.2
-  DebugMode: 0
+  audioOffset: 0.07037462499999592
+  DebugMode: 1
