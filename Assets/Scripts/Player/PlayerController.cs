@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static SkillActionSheetSO;
-using static UnityEditor.ShaderData;
 
 public class PlayerController : MonoBehaviour
 {

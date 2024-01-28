@@ -46,7 +46,7 @@ public class MainMenuButtons : MonoBehaviour
 
     void StartGame()
     {
-        CGManager.PlayCG(settingData, "AfterGameStart", "PlayScene");
+        CGManager.PlayCG(settingData, "BeforeTeach", "TipsScene");
     }
 
     void BackToMainPage()
