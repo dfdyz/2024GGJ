@@ -87,6 +87,8 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.healthBar.rate = GameManager.Instance.gameData.playerHealth / (float)MaxHealth;
         if (!GameManager.Instance.isStarted || !GameManager.Instance.realStarted) return;
 
+        UpdateInputCacheShow();
+
         if (Input.anyKeyDown)
         {
             judgmentBeat = GameManager.Instance.Judgment();
@@ -580,6 +582,49 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 targetPos = GridManager.Instance.GetPlayerVisualPos();
         this.gameObject.transform.position = Vector2.Lerp(this.gameObject.transform.position, targetPos, moveSmooth);
+    }
+
+
+    void UpdateInputCacheShow()
+    {
+
+        int skill = 999;
+
+        if (inputCache.bufferedCount >= 1)
+        {
+            foreach (int sid in matchedSkill)
+            {
+                if (GameManager.Instance.playerSkillRegistries[sid].phases.Length < skill)
+                {
+                    skill = sid;
+                }
+            }
+        }
+
+        bool flag = skill < 999;
+
+        for (int i = 0; i < 8; ++i)
+        {
+            InputClipUI inputClipUI = UIManager.Instance.skillPredictor.GetSlot(i);
+            if(i <= inputCache.bufferedCount)
+            {
+                inputClipUI.SetClip(inputCache.bufferedInput[i]);
+                inputClipUI.HighLight(1);
+            }
+            else
+            {
+                if (skill < 999 && i < GameManager.Instance.playerSkillRegistries[skill].phases.Length)
+                {
+                    inputClipUI.SetClip(GameManager.Instance.playerSkillRegistries[skill].phases[i].inputClip);
+                    inputClipUI.HighLight(2);
+                }
+                else
+                {
+                    inputClipUI.SetClip();
+                    inputClipUI.HighLight(0);
+                }
+            }
+        }
     }
 
 }

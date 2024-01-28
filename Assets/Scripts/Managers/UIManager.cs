@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject suspendPanel;
     [SerializeField] BeaterCtrl beater;
     public HealthBar healthBar;
+    public SkillPredictor skillPredictor;
     private void Awake()
     {
         Instance = this;
