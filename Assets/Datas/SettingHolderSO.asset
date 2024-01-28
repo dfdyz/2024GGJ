@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eed52809e1fe74a8fe8543e1d0bcac, type: 3}
   m_Name: SettingHolderSO
   m_EditorClassIdentifier: 
-  audioOffset: 0.18051612499948533
+  audioOffset: 0.18435619999991104
   subsectionCount: 24
-  playedCG: 
+  playedCG: AfterTeach
   CGNextScene: PlayScene
   scoreLevels:
   - Text: C
     scoreLine: 0
   - Text: B
-    scoreLine: 5000
+    scoreLine: 2000
   - Text: A
-    scoreLine: 10000
+    scoreLine: 5000
   DebugMode: 0
