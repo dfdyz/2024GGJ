@@ -9,9 +9,7 @@ public class CameraFallow : MonoBehaviour
 
     [Header("Parameters")]
     [SerializeField] float smooth = 0.2f;
-    [SerializeField] GameObject A;
-    [SerializeField] GameObject B;
-    [SerializeField] Vector3 Offset = new Vector3 (0, 3, 0);
+    [SerializeField] Vector2 Offset = new Vector3 (0, 3, 0);
 
 
     private void Awake()
@@ -38,7 +36,7 @@ public class CameraFallow : MonoBehaviour
 
     void UpdateCamera()
     {
-        Vector3 posFocusOn = (A.transform.position + B.transform.position) / 2 + Offset;
+        Vector3 posFocusOn = (GridManager.Instance.GetPlayerVisualPos() + GridManager.Instance.GetEnemyVisualPos()) / 2 + Offset;
         posFocusOn = Vector3.Lerp(gameObject.transform.position, posFocusOn, smooth);
         posFocusOn.z = gameObject.transform.position.z;
         gameObject.transform.position = posFocusOn;
@@ -46,7 +44,7 @@ public class CameraFallow : MonoBehaviour
 
     public static void ResetCamera()
     {
-        Vector3 posFocusOn = (instance.A.transform.position + instance.B.transform.position) / 2 + instance.Offset;
+        Vector3 posFocusOn = (GridManager.Instance.GetPlayerVisualPos() + GridManager.Instance.GetEnemyVisualPos()) / 2 + instance.Offset;
         posFocusOn.z = instance.gameObject.transform.position.z;
         instance.gameObject.transform.position = posFocusOn;
     }

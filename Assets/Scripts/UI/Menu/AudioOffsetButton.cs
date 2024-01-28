@@ -9,9 +9,6 @@ public class AudioOffsetButton : MonoBehaviour
     [SerializeField]
     private Button btn_back;
     
-
-
-
     private void Start()
     {
         btn = GetComponent<Button>();
@@ -21,6 +18,6 @@ public class AudioOffsetButton : MonoBehaviour
 
     private void Update()
     {
-        btn.enabled = !SettingsManager.Instance.beginAdjOff;
+        btn_back.gameObject.SetActive(MainMenuButtons.adjustedOff || SettingsManager.Instance.settingData.DebugMode);
     }
 }

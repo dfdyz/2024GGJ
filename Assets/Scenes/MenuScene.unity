@@ -816,6 +816,7 @@ MonoBehaviour:
   - {fileID: 1874617894}
   - {fileID: 33421724}
   textsHolder: {fileID: 2077286393}
+  backButton: {fileID: 780484969}
 --- !u!1 &600610283
 GameObject:
   m_ObjectHideFlags: 0

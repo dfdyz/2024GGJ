@@ -14,6 +14,8 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] Button SettingButton;
     [SerializeField] Button StartButton;
     [SerializeField] Button ExitButton;
+    
+    public static bool adjustedOff = false;
 
     void Start()
     {
@@ -32,6 +34,13 @@ public class MainMenuButtons : MonoBehaviour
         ExitButton.onClick.AddListener(() => {
             Application.Quit();
         });
+
+        if (!adjustedOff)
+        {
+            SettingPage.SetActive(true);
+        }
+
+
     }
 
     void StartGame()

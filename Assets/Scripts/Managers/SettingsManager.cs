@@ -61,6 +61,7 @@ public class SettingsManager : MonoBehaviour
     IEnumerator IAdjustAudioOffset()
     {
         AdjOff_beat = 0;
+        MainMenuButtons.adjustedOff = false;
         beginAdjOff = true;
         AdjOff_enable_beat = false;
         for (int i = 0; i < AdjOff_sample.Length; ++i)
@@ -104,6 +105,8 @@ public class SettingsManager : MonoBehaviour
         beginAdjOff = false;
 
         adjCor = null;
+
+        MainMenuButtons.adjustedOff = true;
     }
 
 

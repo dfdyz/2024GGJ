@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class AdjustPanel : MonoBehaviour
 {
+    
     [SerializeField] Text[] Off_sample_text = new Text[5];
     [SerializeField] GameObject textsHolder;
+    [SerializeField] GameObject backButton;
 
     // Update is called once per frame
     void Update()
@@ -18,5 +20,7 @@ public class AdjustPanel : MonoBehaviour
         }
 
         Off_sample_text[4].text = "" + (int)(SettingsManager.Instance.settingData.audioOffset * 1000);
+
+        backButton.SetActive(MainMenuButtons.adjustedOff);
     }
 }

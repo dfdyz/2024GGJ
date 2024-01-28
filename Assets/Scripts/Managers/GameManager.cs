@@ -175,6 +175,8 @@ public class GameManager : MonoBehaviour
 
         //GridManager.Instance.InitBattlePos();
 
+        CameraFallow.ResetCamera();
+
         if (!DebugManager.Instance.debugMode) {
             StartCoroutine(PlayModeStart());
         }
