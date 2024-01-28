@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
     IEnumerator SettlementGame_()
     {
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+        CGManager.PlayCG(settingData, "BeforeSettlementGame", "ScoreScene");
     }
 
     public int GetModifiedCurrBeat()

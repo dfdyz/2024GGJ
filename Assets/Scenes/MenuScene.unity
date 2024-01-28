@@ -2480,6 +2480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3507db89533dea47a689acf4b5a968f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settingData: {fileID: 11400000, guid: 0d56e41b511df7e4996efcf9086d91f9, type: 2}
   SettingPage: {fileID: 1182903273}
   backButtons:
   - {fileID: 780484971}

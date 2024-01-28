@@ -42,7 +42,8 @@ public class ScoreUICtrl : MonoBehaviour
     void Start()
     {
         backButton.onClick.AddListener(() => {
-            SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+            //SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
+            CGManager.PlayCG(settings, "BackToMenu", "MenuScene");
         });
 
 

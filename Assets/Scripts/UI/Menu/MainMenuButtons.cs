@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MainMenuButtons : MonoBehaviour
 {
     // Start is called before the first frame update
+    [SerializeField] SettingHolderSO settingData;
     [SerializeField] GameObject SettingPage;
 
     [SerializeField] Button[] backButtons;
@@ -35,7 +36,7 @@ public class MainMenuButtons : MonoBehaviour
             Application.Quit();
         });
 
-        if (!adjustedOff)
+        if (!adjustedOff && !settingData.DebugMode)
         {
             SettingPage.SetActive(true);
         }
@@ -45,7 +46,7 @@ public class MainMenuButtons : MonoBehaviour
 
     void StartGame()
     {
-        SceneManager.LoadScene("PlayScene", LoadSceneMode.Single);
+        CGManager.PlayCG(settingData, "AfterGameStart", "PlayScene");
     }
 
     void BackToMainPage()
