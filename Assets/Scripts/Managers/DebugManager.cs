@@ -60,7 +60,7 @@ public class DebugManager : MonoBehaviour
         GUI.DragWindow();
     }
 
-    Rect debugwinRect = new Rect(50, 50, 300, 300);
+    Rect debugwinRect = new Rect(50, 50, 300, 800);
     private void OnGUI()
     {
         if(debugMode) debugwinRect = GUILayout.Window(114514, debugwinRect, DebugWindow, "Debug");

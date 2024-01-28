@@ -65,7 +65,7 @@ MonoBehaviour:
         types: 0000000000000000
         count: 2
       audio: 
-      effect: 
+      effect: t2
   - name: P3
     phases:
     - type: 1

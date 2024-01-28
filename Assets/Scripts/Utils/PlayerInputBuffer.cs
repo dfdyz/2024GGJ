@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerInputBuffer
 {
-    public int bufferedCount { get; private set; } = 0;
+    public int bufferedCount { get; private set; } = -1;
     public InputClip[] bufferedInput { get; private set; }
     public HashSet<int> matchedSkill { get; private set; } = new HashSet<int>();
     public HashSet<int> lastMatchedSkill { get; private set; } = new HashSet<int>();
@@ -101,7 +101,7 @@ public class PlayerInputBuffer
 
         matchedSkill.Clear();
 
-        bufferedCount = 0;
+        bufferedCount = -1;
     }
 
     public override string ToString()

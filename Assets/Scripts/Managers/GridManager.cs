@@ -26,7 +26,7 @@ public class GridManager : MonoBehaviour
     public int playerAt = 0;
     public int enemyAt = 0;
     public EnemyCtrl enemyCtrl;
-    //public PlayerController playerCtrl;
+    public PlayerController playerCtrl;
 
     private void Awake()
     {

@@ -97,6 +97,12 @@ public class EnemyCtrl : MonoBehaviour
 
                         break;
                     case SkillActionSheetSO.PhaseType.Attack:
+                        if (cPhase.effect != "")
+                        {
+                            EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, faceDir);
+                        }
+
+
                         if (MappingRealDir(cPhase.inputClip.types[0]) > 0) { // right
                             if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                             {
@@ -112,12 +118,15 @@ public class EnemyCtrl : MonoBehaviour
                                 attackSucess = true;
                             }
                         }
-
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovement:
                         selfPos += MappingRealDir(cPhase.inputClip.types[0]) * cPhase.phaseData[0];
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
+                        if (cPhase.effect != "")
+                        {
+                            EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, faceDir);
+                        }
                         // attack and move
                         if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
                         { // right

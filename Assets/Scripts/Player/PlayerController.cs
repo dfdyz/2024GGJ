@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
 
         DebugManager.Instance.debugWindowAttachmentFunc += DebugInfo;
 
+        GridManager.Instance.playerCtrl = this;
+
         CameraFallow.ResetCamera();
     }
 
@@ -538,15 +540,17 @@ public class PlayerController : MonoBehaviour
             if (matchedSkill.Count > 0) // 还有连招
             {
                 attachMatch = true;
-                inputCache.ResetSlotBehind(slot);
                 //inputCache.PutBufferEmpty(slot);
             }
             else // 没连招了
             {
+                attachMatch = false;
                 inputCache.Clear();
                 ResetMatch();
+
                 slot = 0;
             }
+            inputCache.ResetSlotBehind(slot);
         }
 
 
@@ -590,7 +594,7 @@ public class PlayerController : MonoBehaviour
 
         int skill = 999;
 
-        if (inputCache.bufferedCount >= 1)
+        if (inputCache.bufferedCount >= 0)
         {
             foreach (int sid in matchedSkill)
             {
@@ -601,7 +605,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        bool flag = skill < 999;
+        
 
         for (int i = 0; i < 8; ++i)
         {
