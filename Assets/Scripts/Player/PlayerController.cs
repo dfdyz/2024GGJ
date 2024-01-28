@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviour
                 {
                     combo = 0;
                     GameManager.Instance.HurtPlayer(10);
+                    EffectManager.GetEffectInctanceByName("miss").ShowEffect(0, 0);
                 }
             }
         }

@@ -99,12 +99,14 @@ public class EnemyCtrl : MonoBehaviour
 
                         break;
                     case SkillActionSheetSO.PhaseType.Attack:
+
+                        
                         if (cPhase.effect != "")
                         {
                             EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, MappingRealDir(cPhase.inputClip.types[0]));
                         }
 
-
+                        /*
                         if (MappingRealDir(cPhase.inputClip.types[0]) > 0) { // right
                             if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                             {
@@ -119,16 +121,18 @@ public class EnemyCtrl : MonoBehaviour
                                 GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                                 attackSucess = true;
                             }
-                        }
+                        }*/
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovement:
                         selfPos += MappingRealDir(cPhase.inputClip.types[0]) * cPhase.phaseData[0];
                         break;
                     case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
+                        
                         if (cPhase.effect != "")
                         {
                             EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, faceDir);
                         }
+                        /*
                         // attack and move
                         if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
                         { // right
@@ -145,7 +149,7 @@ public class EnemyCtrl : MonoBehaviour
                                 GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                                 attackSucess = true;
                             }
-                        }
+                        }*/
 
                         selfPos += MappingRealDir(cPhase.inputClip.types[0]) * cPhase.phaseData[0];
                         break;
@@ -167,53 +171,51 @@ public class EnemyCtrl : MonoBehaviour
         if (currPhase >= 0)
         {
             SkillActionSheetSO.SkillPhase cPhase = currentSkill.phases[currPhase - 1];
-            if (!attackSucess)
+
+            switch (cPhase.type)
             {
-                switch (cPhase.type)
-                {
-                    // no movement
-                    case SkillActionSheetSO.PhaseType.Attack:
-                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
-                        { // right
-                            if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
-                            {
-                                GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
-                            }
-                        }
-                        else // left
+                // no movement
+                case SkillActionSheetSO.PhaseType.Attack:
+                    if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
+                    { // right
+                        if (playerPos > selfPos && playerPos <= selfPos + cPhase.phaseData[0])
                         {
-                            if (playerPos < selfPos && playerPos >= selfPos - cPhase.phaseData[0])
-                            {
-                                GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
-                            }
+                            GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                         }
-
-
-                        break;
-                    case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
-                        // attack and move
-                        if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
-                        { // right
-                            if (playerPos >= selfPos - cPhase.phaseData[0] && playerPos <= selfPos)
-                            {
-                                GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
-
-                            }
-                        }
-                        else // left
+                    }
+                    else // left
+                    {
+                        if (playerPos < selfPos && playerPos >= selfPos - cPhase.phaseData[0])
                         {
-                            if (playerPos <= selfPos + cPhase.phaseData[0] && playerPos >= selfPos)
-                            {
-                                GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
-                            }
+                            GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
                         }
+                    }
 
-                        break;
-                    default: break;
-                }
+                    break;
+                case SkillActionSheetSO.PhaseType.AttachMovementWithAttack:
+                    // attack and move
+                    if (MappingRealDir(cPhase.inputClip.types[0]) > 0)
+                    { // right
+                        if (playerPos >= selfPos - cPhase.phaseData[0] && playerPos <= selfPos)
+                        {
+                            GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
+
+                        }
+                    }
+                    else // left
+                    {
+                        if (playerPos <= selfPos + cPhase.phaseData[0] && playerPos >= selfPos)
+                        {
+                            GameManager.Instance.HurtPlayer(cPhase.phaseData[1]);
+                        }
+                    }
+
+                    break;
+                default: break;
             }
+
         }
-        attackSucess = false;
+        //attackSucess = false;
     }
 
     public int GetNextPos()

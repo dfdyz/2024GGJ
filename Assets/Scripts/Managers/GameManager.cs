@@ -127,6 +127,8 @@ public class GameManager : MonoBehaviour
     {
         gameData.playerHealth -= dmg;
 
+        if(dmg > 0) EffectManager.GetEffectInctanceByName("playerhit").ShowEffect(GridManager.Instance.playerAt, 1);
+
         if(gameData.playerHealth <= 0)
         {
             SettlementGame();
@@ -175,6 +177,8 @@ public class GameManager : MonoBehaviour
 
         //GridManager.Instance.InitBattlePos();
 
+        gameData.playerHealth = 100;
+
         CameraFallow.ResetCamera();
 
         if (!DebugManager.Instance.debugMode) {
@@ -191,6 +195,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int score)
     {
         gameData.Score += score;
+        EffectManager.GetEffectInctanceByName("enemyhit").ShowEffect(GridManager.Instance.enemyAt, 1);
     }
 
     void onBaseBeat()

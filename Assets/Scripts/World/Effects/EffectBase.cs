@@ -5,12 +5,12 @@ using UnityEngine;
 public class EffectBase : MonoBehaviour
 {
     [SerializeField] SpriteRenderer[] sprites;
-    [SerializeField] float smoothTime = 0.4f;
+    [SerializeField] protected float smoothTime = 0.4f;
     [SerializeField] int defaultFace = 1;
 
-    float currentTime = 0;
+    protected float currentTime = 0;
     
-    private void Start()
+    protected virtual void Start()
     {
         DebugManager.Instance.debugWindowAttachmentFunc += DebugInfo;
     }
@@ -24,7 +24,7 @@ public class EffectBase : MonoBehaviour
     }
 
 
-    public void ShowEffect(int pos, float face)
+    public virtual void ShowEffect(int pos, float face)
     {
         gameObject.transform.position = GridManager.Instance.GetViaualPosAt(pos);
         gameObject.transform.localScale = new Vector3(defaultFace * face, 1, 1);
@@ -32,7 +32,7 @@ public class EffectBase : MonoBehaviour
     }
 
 
-    public void Update()
+    protected virtual void Update()
     {
         if(currentTime > 0)
         {

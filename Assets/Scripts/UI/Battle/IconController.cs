@@ -11,8 +11,8 @@ public class IconController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < level.Length; i++) {
-            if(GameManager.Instance.gameData.playerHealth > level[i])
+        for (int i = level.Length-1; i >= 0; --i) {
+            if(GameManager.Instance.gameData.playerHealth >= level[i])
             {
                 img.sprite = spriteLevel[i];
                 break;
