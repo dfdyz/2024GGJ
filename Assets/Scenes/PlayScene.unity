@@ -462,10 +462,10 @@ MonoBehaviour:
   gameData: {fileID: 11400000, guid: a0c0ca87276d46048a3c41281cf40680, type: 2}
   playerSkillRegistries: []
   mobSkillRegistries: []
-  bpm: 120
+  bpm: 110
   ms_JudgmentInterval_pos: 100
   ms_JudgmentInterval_neg: 80
-  ms_JudgmentInterval_add: 60
+  ms_JudgmentInterval_add: 80
   lastSucessBeat: 0
   realStarted: 0
 --- !u!114 &137796652

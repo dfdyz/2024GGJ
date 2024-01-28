@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SettingHolderSO
   m_EditorClassIdentifier: 
   audioOffset: 0.18435619999991104
-  subsectionCount: 24
+  subsectionCount: 32
   playedCG: AfterTeach
   CGNextScene: PlayScene
   scoreLevels:
@@ -22,5 +22,5 @@ MonoBehaviour:
   - Text: B
     scoreLine: 2000
   - Text: A
-    scoreLine: 5000
+    scoreLine: 3000
   DebugMode: 0
