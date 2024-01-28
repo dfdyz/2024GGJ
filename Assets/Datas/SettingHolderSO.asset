@@ -20,7 +20,7 @@ MonoBehaviour:
   - Text: C
     scoreLine: 0
   - Text: B
-    scoreLine: 2000
+    scoreLine: 1500
   - Text: A
-    scoreLine: 3000
+    scoreLine: 2500
   DebugMode: 0
