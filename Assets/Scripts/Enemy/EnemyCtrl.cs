@@ -8,7 +8,7 @@ public class EnemyCtrl : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Resources")]
-
+    [SerializeField] Animator animator;
 
     [Header("Parameters")]
     [SerializeField] float moveSmooth = 0.25f;
@@ -57,6 +57,7 @@ public class EnemyCtrl : MonoBehaviour
     void Update()
     {
         MovementVisual();
+        ScaleVisual();
         if (!GameManager.Instance.isStarted) return;
     }
 
@@ -75,6 +76,7 @@ public class EnemyCtrl : MonoBehaviour
     bool attackSucess = false;
     void onBeat()
     {
+        animator.Play("Beat");
         if (currPhase == stunBeginPhase)
         {
             print("Been Stuned");
@@ -99,7 +101,7 @@ public class EnemyCtrl : MonoBehaviour
                     case SkillActionSheetSO.PhaseType.Attack:
                         if (cPhase.effect != "")
                         {
-                            EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, faceDir);
+                            EffectManager.GetEffectInctanceByName(cPhase.effect).ShowEffect(selfPos, MappingRealDir(cPhase.inputClip.types[0]));
                         }
 
 
@@ -288,5 +290,8 @@ public class EnemyCtrl : MonoBehaviour
         Vector2 targetPos = GridManager.Instance.GetEnemyVisualPos();
         gameObject.transform.position = Vector2.Lerp(gameObject.transform.position, targetPos, moveSmooth);
     }
-
+    void ScaleVisual()
+    {
+        gameObject.transform.localScale = new Vector3(faceDir, 1, 0);
+    }
 }

@@ -10,7 +10,7 @@ using static UnityEditor.ShaderData;
 public class PlayerController : MonoBehaviour
 {
     [Header("Resources")]
-    
+    [SerializeField] Animator animator;
 
     [Header("Parameters")]
     [SerializeField] int MaxHealth = 100;
@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MovementVisual();
+        ScaleVisual();
         UIManager.Instance.healthBar.rate = GameManager.Instance.gameData.playerHealth / (float)MaxHealth;
         if (!GameManager.Instance.isStarted || !GameManager.Instance.realStarted) return;
 
@@ -526,7 +527,7 @@ public class PlayerController : MonoBehaviour
 
     void onBeat()
     {
-        
+        animator.Play("Beat");
     }
 
     #endregion
@@ -586,6 +587,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 targetPos = GridManager.Instance.GetPlayerVisualPos();
         this.gameObject.transform.position = Vector2.Lerp(this.gameObject.transform.position, targetPos, moveSmooth);
+    }
+
+    void ScaleVisual()
+    {
+        gameObject.transform.localScale = new Vector3(faceDir, 1, 0);
     }
 
 

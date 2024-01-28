@@ -21,4 +21,4 @@ MonoBehaviour:
     scoreLine: 5000
   - Text: A
     scoreLine: 10000
-  DebugMode: 1
+  DebugMode: 0

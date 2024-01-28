@@ -17,9 +17,9 @@ public class EffectBase : MonoBehaviour
 
     void DebugInfo()
     {
-        if (GUILayout.Button(gameObject.name    ))
+        if (GUILayout.Button(gameObject.name))
         {
-            ShowEffect(7, -1);
+            ShowEffect(8, -1);
         }
     }
 
